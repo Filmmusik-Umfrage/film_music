@@ -1,9 +1,128 @@
+/* Grundlegendes Layout */
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  overflow-y: auto; /* Scrollen erlauben */
+}
+
+#app {
+  width: 90%;
+  max-width: 800px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+  margin: 80px auto; /* Abstand vom oberen Rand */
+  box-sizing: border-box;
+}
+
+/* Fortschrittsbalken */
+#progress-bar-container {
+  width: 100%;
+  height: 20px;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+#progress-bar {
+  height: 100%;
+  background: #76c7c0;
+  transition: width 0.3s ease;
+  flex: 1;
+}
+
+#progress-text {
+  font-size: 1rem;
+  font-weight: bold;
   color: #333;
 }
-h1 {
-  color: #007acc;
+
+/* Screens */
+.screen {
+  display: none;
+  text-align: center;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Bildschirmhöhe ausfüllen */
+  box-sizing: border-box;
+}
+
+/* Start- und Endseite */
+#start-screen h1,
+#end-screen h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+#start-screen p,
+#end-screen p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#start-button {
+  background: #76c7c0;
+}
+
+#start-button:hover {
+  background: #5ba8a2;
+}
+
+#next-button {
+  background: #007BFF;
+}
+
+#next-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+#next-button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+/* Frage-Seite */
+#rating-canvas {
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 500px;
+  height: 500px;
+  background-color: #f0f0f0;
+  margin: 20px auto;
+}
+
+#selected-emotion {
+  font-size: 1rem;
+  margin-top: 10px;
+  color: #333;
 }
