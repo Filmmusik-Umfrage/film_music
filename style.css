@@ -4,22 +4,18 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  overflow: hidden;
+  overflow-y: auto; /* Scrollen erlauben */
 }
 
 #app {
-  width: 100%;
+  width: 90%;
   max-width: 800px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 20px;
-  margin-top: 60px;
+  margin: 80px auto; /* Abstand vom oberen Rand */
   box-sizing: border-box;
 }
 
@@ -55,19 +51,19 @@ body {
 /* Screens */
 .screen {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 60px); /* Abzüglich Fortschrittsbalken */
-  padding: 20px;
-  box-sizing: border-box;
+  text-align: center;
 }
 
 .screen.active {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Bildschirmhöhe ausfüllen */
+  box-sizing: border-box;
 }
 
-/* Startseite */
+/* Start- und Endseite */
 #start-screen h1,
 #end-screen h1 {
   font-size: 1.8rem;
@@ -98,6 +94,10 @@ button:hover {
   background: #76c7c0;
 }
 
+#start-button:hover {
+  background: #5ba8a2;
+}
+
 #next-button {
   background: #007BFF;
 }
@@ -105,6 +105,10 @@ button:hover {
 #next-button:disabled {
   background: #cccccc;
   cursor: not-allowed;
+}
+
+#next-button:hover:not(:disabled) {
+  background: #0056b3;
 }
 
 /* Frage-Seite */
