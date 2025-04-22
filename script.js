@@ -37,23 +37,21 @@ function drawEmotionWheel() {
   const radius = Math.min(centerX, centerY) - 20;
 
   // Hintergrund
-  ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height);
   ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
 
   // Kreis
   ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.stroke();
 
   // Achsen
   ctx.beginPath();
-  ctx.moveTo(centerX, 0);
-  ctx.lineTo(centerX, ratingCanvas.height);
-  ctx.moveTo(0, centerY);
-  ctx.lineTo(ratingCanvas.width, centerY);
+  ctx.moveTo(centerX, 20);
+  ctx.lineTo(centerX, ratingCanvas.height - 20);
+  ctx.moveTo(20, centerY);
+  ctx.lineTo(ratingCanvas.width - 20, centerY);
   ctx.stroke();
 
   // Achsen-Beschriftungen
@@ -118,5 +116,6 @@ function loadQuestion() {
 document.getElementById("start-button").addEventListener("click", () => {
   currentStep = 0;
   userRatings = [];
+  showScreen(questionScreen);
   loadQuestion();
 });

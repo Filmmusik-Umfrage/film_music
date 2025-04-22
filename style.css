@@ -63,7 +63,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Start- und Endseite */
+/* Startseite */
 #start-screen h1,
 #end-screen h1 {
   font-size: 1.8rem;
