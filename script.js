@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,6 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const database = getDatabase(app);
 
 // Survey Logic
 const videos = ["video1.mp4", "video2.mp4", "video3.mp4"];
@@ -94,6 +96,7 @@ nextButton.addEventListener("click", () => {
     currentStep++;
     loadQuestion();
   } else {
+    incrementSurveyCount();
     showScreen(endScreen);
   }
 });
@@ -113,3 +116,19 @@ document.getElementById("start-button").addEventListener("click", () => {
   userRatings = [];
   loadQuestion();
 });
+
+// Increment the survey count in Firebase Realtime Database
+function incrementSurveyCount() {
+  const surveyCountRef = ref(database, "surveyCount");
+
+  get(surveyCountRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const currentCount = snapshot.val();
+      update(surveyCountRef, { ".value": currentCount + 1 });
+    } else {
+      set(surveyCountRef, 1);
+    }
+  }).catch((error) => {
+    console.error("Error updating survey count:", error);
+  });
+}
