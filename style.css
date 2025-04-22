@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
-  overflow-y: auto; /* Scrollen erlauben */
+  overflow-y: auto;
 }
 
 #app {
@@ -13,13 +13,11 @@ body {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   padding: 20px;
-  margin: 80px auto; /* Abstand vom oberen Rand */
+  margin: 80px auto;
   box-sizing: border-box;
 }
 
-/* Fortschrittsbalken */
 #progress-bar-container {
   width: 100%;
   height: 20px;
@@ -28,7 +26,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
@@ -48,7 +45,6 @@ body {
   color: #333;
 }
 
-/* Screens */
 .screen {
   display: none;
   text-align: center;
@@ -59,21 +55,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Bildschirmhöhe ausfüllen */
-  box-sizing: border-box;
+  min-height: 100vh;
 }
 
-/* Start- und Endseite */
 #start-screen h1,
 #end-screen h1 {
   font-size: 1.8rem;
   margin-bottom: 10px;
-}
-
-#start-screen p,
-#end-screen p {
-  font-size: 1rem;
-  margin-bottom: 20px;
 }
 
 button {
@@ -94,24 +82,10 @@ button:hover {
   background: #76c7c0;
 }
 
-#start-button:hover {
-  background: #5ba8a2;
-}
-
 #next-button {
   background: #007BFF;
 }
 
-#next-button:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-}
-
-#next-button:hover:not(:disabled) {
-  background: #0056b3;
-}
-
-/* Frage-Seite */
 #rating-canvas {
   border: 1px solid #ccc;
   width: 100%;
@@ -125,9 +99,4 @@ button:hover {
   text-align: center;
   font-size: 1rem;
   margin: 20px 0;
-}
-
-/* Endseite */
-#end-screen {
-  margin-top: 30px;
 }
