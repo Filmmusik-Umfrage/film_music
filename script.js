@@ -122,7 +122,7 @@ document.getElementById("start-button").addEventListener("click", () => {
   loadQuestion();
 });
 
-// Increment the survey count in Firebase Realtime Database
+// Increment the survey count in Firebase Realtime Databas
 function incrementSurveyCount() {
   const surveyCountRef = ref(database, "surveyCount");
 
