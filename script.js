@@ -36,49 +36,30 @@ function drawEmotionWheel() {
   const centerY = ratingCanvas.height / 2;
   const radius = Math.min(centerX, centerY) - 20;
 
-  // Hintergrund
   ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
 
-  // Kreis
   ctx.strokeStyle = "#000000";
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Achsen
   ctx.beginPath();
   ctx.moveTo(centerX, 20);
   ctx.lineTo(centerX, ratingCanvas.height - 20);
   ctx.moveTo(20, centerY);
   ctx.lineTo(ratingCanvas.width - 20, centerY);
   ctx.stroke();
-
-  // Achsen-Beschriftungen
-  ctx.fillStyle = "#000000";
-  ctx.font = "14px Arial";
-  ctx.textAlign = "center";
-
-  ctx.fillText("aktivierend", centerX, 10);
-  ctx.fillText("beruhigend", centerX, ratingCanvas.height - 10);
-  ctx.fillText("angenehm", ratingCanvas.width - 10, centerY);
-  ctx.fillText("unangenehm", 10, centerY);
 }
 
-// Emotion durch Klick erfassen
 ratingCanvas.addEventListener("click", (event) => {
   const rect = ratingCanvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
 
-  const centerX = ratingCanvas.width / 2;
-  const centerY = ratingCanvas.height / 2;
-  const relX = x - centerX;
-  const relY = y - centerY;
-
-  userRating = { x: relX, y: relY };
+  userRating = { x: x - rect.width / 2, y: y - rect.height / 2 };
   drawEmotionWheel();
-
+  
   ctx.fillStyle = "#FF0000";
   ctx.beginPath();
   ctx.arc(x, y, 5, 0, Math.PI * 2);
@@ -88,11 +69,8 @@ ratingCanvas.addEventListener("click", (event) => {
   nextButton.disabled = false;
 });
 
-// Nächste Frage
 nextButton.addEventListener("click", () => {
   userRatings.push(userRating);
-  userRating = null;
-
   if (currentStep < videos.length - 1) {
     currentStep++;
     loadQuestion();
@@ -101,21 +79,15 @@ nextButton.addEventListener("click", () => {
   }
 });
 
-// Frage laden
+document.getElementById("start-button").addEventListener("click", () => {
+  showScreen(questionScreen);
+  loadQuestion();
+});
+
 function loadQuestion() {
   updateProgress();
   videoPlayer.src = videos[currentStep];
   videoPlayer.play();
   drawEmotionWheel();
   nextButton.disabled = true;
-  selectedEmotionText.textContent = "Bitte wählen Sie Ihre Emotion durch Klicken auf das Rad aus.";
-  showScreen(questionScreen);
 }
-
-// Start-Button
-document.getElementById("start-button").addEventListener("click", () => {
-  currentStep = 0;
-  userRatings = [];
-  showScreen(questionScreen);
-  loadQuestion();
-});
