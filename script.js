@@ -1,27 +1,3 @@
-// Firebase SDK-Integration
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-// Firebase-Konfiguration
-const firebaseConfig = {
-    apiKey: "AIzaSyDXfMY9wLXRRvGGTYrYLJ195LJZZhud4zDs",
-    authDomain: "filmmusik-umfrage.firebaseapp.com",
-    projectId: "filmmusik-umfrage",
-    storageBucket: "filmmusik-umfrage.appspot.com",
-    messagingSenderId: "933950539609",
-    appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
-    measurementId: "G-Y531Z241S9"
-};
-
-// Firebase-Initialisierung
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// TODO: Optional - Firestore oder andere Firebase-Module integrieren
-// Beispiel: Umfrageantworten speichern
-// import { getFirestore, doc, setDoc } from "firebase/firestore";
-// const db = getFirestore(app);
-
 // Videos und Fortschritt
 const videos = ["video1.mp4", "video2.mp4", "video3.mp4"];
 let currentStep = 0;
@@ -61,21 +37,23 @@ function drawEmotionWheel() {
   const radius = Math.min(centerX, centerY) - 20;
 
   // Hintergrund
+  ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height);
   ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
 
   // Kreis
   ctx.strokeStyle = "#000000";
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.stroke();
 
   // Achsen
   ctx.beginPath();
-  ctx.moveTo(centerX, 20);
-  ctx.lineTo(centerX, ratingCanvas.height - 20);
-  ctx.moveTo(20, centerY);
-  ctx.lineTo(ratingCanvas.width - 20, centerY);
+  ctx.moveTo(centerX, 0);
+  ctx.lineTo(centerX, ratingCanvas.height);
+  ctx.moveTo(0, centerY);
+  ctx.lineTo(ratingCanvas.width, centerY);
   ctx.stroke();
 
   // Achsen-Beschriftungen
@@ -113,7 +91,7 @@ ratingCanvas.addEventListener("click", (event) => {
 });
 
 // Nächste Frage
-nextButton.addEventListener("click", async () => {
+nextButton.addEventListener("click", () => {
   userRatings.push(userRating);
   userRating = null;
 
@@ -121,16 +99,6 @@ nextButton.addEventListener("click", async () => {
     currentStep++;
     loadQuestion();
   } else {
-    // Ergebnisse speichern (Firebase-Datenbank verwenden)
-    // Beispiel für Firestore:
-    // try {
-    //   await setDoc(doc(db, "surveyResults", Date.now().toString()), {
-    //     ratings: userRatings
-    //   });
-    //   console.log("Ergebnisse erfolgreich gespeichert");
-    // } catch (error) {
-    //   console.error("Fehler beim Speichern der Ergebnisse:", error);
-    // }
     showScreen(endScreen);
   }
 });
