@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
-  overflow-y: scroll; /* Scrollen aktivieren */
+  overflow-y: auto; /* Scrollen erlauben */
 }
 
 #app {
@@ -29,7 +29,7 @@ body {
   justify-content: space-between;
   padding: 0 10px;
   box-sizing: border-box;
-  position: absolute; /* Geändert von "fixed" zu "absolute" */
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
