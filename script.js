@@ -37,7 +37,7 @@ function drawEmotionWheel() {
   const radius = Math.min(centerX, centerY) - 20;
 
   // Hintergrund
-  ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height);
+  ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height); // Hintergrund löschen
   ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
 
@@ -60,7 +60,9 @@ function drawEmotionWheel() {
   ctx.fillStyle = "#000000";
   ctx.font = "14px Arial";
   ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
+  // Achsen-Beschriftungen
   ctx.fillText("aktivierend", centerX, 10);
   ctx.fillText("beruhigend", centerX, ratingCanvas.height - 10);
   ctx.fillText("angenehm", ratingCanvas.width - 10, centerY);
@@ -81,6 +83,7 @@ ratingCanvas.addEventListener("click", (event) => {
   userRating = { x: relX, y: relY };
   drawEmotionWheel();
 
+  // Marker für die gewählte Emotion
   ctx.fillStyle = "#FF0000";
   ctx.beginPath();
   ctx.arc(x, y, 5, 0, Math.PI * 2);
