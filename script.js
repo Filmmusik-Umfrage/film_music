@@ -1,21 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-// Firebase-Konfiguration
-const firebaseConfig = {
-  apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
-  authDomain: "filmmusik-umfrage.firebaseapp.com",
-  projectId: "filmmusik-umfrage",
-  storageBucket: "filmmusik-umfrage.firebasestorage.app",
-  messagingSenderId: "933950539609",
-  appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
-  measurementId: "G-Y5312Z41S9"
-};
-
-// Firebase initialisieren
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 // Videos und Fortschritt
 const videos = ["video1.mp4", "video2.mp4", "video3.mp4"];
 let currentStep = 0;
@@ -42,42 +24,50 @@ function updateProgress() {
   progressText.textContent = `${Math.round(progress)}%`;
 }
 
-// Bildschirm anzeigen
+// Screen anzeigen
 function showScreen(screen) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
   screen.classList.add("active");
 }
 
-// Emotionen-Rad zeichnen
+// Emotion Wheel zeichnen
 function drawEmotionWheel() {
   const centerX = ratingCanvas.width / 2;
   const centerY = ratingCanvas.height / 2;
   const radius = Math.min(centerX, centerY) - 20;
 
+  // Hintergrund
   ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height);
-  
+  ctx.fillStyle = "#f0f0f0";
+  ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
+
+  // Kreis
   ctx.strokeStyle = "#000000";
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.stroke();
 
+  // Achsen
   ctx.beginPath();
-  ctx.moveTo(centerX, 20);
-  ctx.lineTo(centerX, ratingCanvas.height - 20);
-  ctx.moveTo(20, centerY);
-  ctx.lineTo(ratingCanvas.width - 20, centerY);
+  ctx.moveTo(centerX, 0);
+  ctx.lineTo(centerX, ratingCanvas.height);
+  ctx.moveTo(0, centerY);
+  ctx.lineTo(ratingCanvas.width, centerY);
   ctx.stroke();
 
+  // Achsen-Beschriftungen
   ctx.fillStyle = "#000000";
   ctx.font = "14px Arial";
   ctx.textAlign = "center";
+
   ctx.fillText("aktivierend", centerX, 10);
   ctx.fillText("beruhigend", centerX, ratingCanvas.height - 10);
   ctx.fillText("angenehm", ratingCanvas.width - 10, centerY);
   ctx.fillText("unangenehm", 10, centerY);
 }
 
-// Emotion auf Klick speichern
+// Emotion durch Klick erfassen
 ratingCanvas.addEventListener("click", (event) => {
   const rect = ratingCanvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -100,24 +90,8 @@ ratingCanvas.addEventListener("click", (event) => {
   nextButton.disabled = false;
 });
 
-// Benutzerbewertung in Firestore speichern
-async function saveUserRating(videoId, rating) {
-  const userId = `user_${Date.now()}`; // Einfache eindeutige Benutzer-ID (für echte Apps verbessern)
-  const docRef = doc(db, "userRatings", `${userId}_${videoId}`);
-  await setDoc(docRef, {
-    videoId: videoId,
-    rating: rating,
-    timestamp: new Date()
-  });
-  console.log("Rating gespeichert in Firestore!");
-}
-
 // Nächste Frage
-nextButton.addEventListener("click", async () => {
-  if (userRating) {
-    await saveUserRating(videos[currentStep], userRating);
-  }
-
+nextButton.addEventListener("click", () => {
   userRatings.push(userRating);
   userRating = null;
 
