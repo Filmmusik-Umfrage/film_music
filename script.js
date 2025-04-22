@@ -19,8 +19,13 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-// Survey Logic
-const videos = ["video1.mp4", "video2.mp4", "video3.mp4"];
+// Placeholder videos
+const videos = [
+  "https://player.vimeo.com/external/854232.sd.mp4?s=23d9c2beec2f93c645eed3df181e894aaf66d5c0&profile_id=164",
+  "https://player.vimeo.com/external/857146.sd.mp4?s=d05933d3e9a3dc12f8e94b9de0b183ba7d84f93d&profile_id=164",
+  "https://player.vimeo.com/external/856385.sd.mp4?s=6cbdcd7ad5b2ed7daff7f75969b78de546c57092&profile_id=164"
+];
+
 let currentStep = 0;
 let userRatings = [];
 
