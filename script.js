@@ -2,24 +2,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
 import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-// Firebase configuration
+// Firebase-Konfiguration
 const firebaseConfig = {
   apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
   authDomain: "filmmusik-umfrage.firebaseapp.com",
   databaseURL: "https://filmmusik-umfrage-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "filmmusik-umfrage",
-  storageBucket: "filmmusik-umfrage.firebasestorage.app",
+  storageBucket: "filmmusik-umfrage.filestorage.app",
   messagingSenderId: "933950539609",
   appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
   measurementId: "G-Y5312Z41S9",
 };
 
-// Initialize Firebase
+// Firebase initialisieren
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-// Placeholder videos
+// Platzhalter für Videos
 const videos = [
   "https://player.vimeo.com/external/854232.sd.mp4?s=23d9c2beec2f93c645eed3df181e894aaf66d5c0&profile_id=164",
   "https://player.vimeo.com/external/857146.sd.mp4?s=d05933d3e9a3dc12f8e94b9de0b183ba7d84f93d&profile_id=164",
@@ -42,17 +42,20 @@ const selectedEmotionText = document.getElementById("selected-emotion");
 const ctx = ratingCanvas.getContext("2d");
 let userRating = null;
 
+// Fortschrittsanzeige aktualisieren
 function updateProgress() {
   const progress = ((currentStep + 1) / videos.length) * 100;
   progressBar.style.width = `${progress}%`;
   progressText.textContent = `${Math.round(progress)}%`;
 }
 
+// Bildschirm wechseln
 function showScreen(screen) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
   screen.classList.add("active");
 }
 
+// Emotion-Rad zeichnen
 function drawEmotionWheel() {
   const centerX = ratingCanvas.width / 2;
   const centerY = ratingCanvas.height / 2;
@@ -74,6 +77,22 @@ function drawEmotionWheel() {
   ctx.stroke();
 }
 
+// Ergebnisse speichern
+function saveResult(videoIndex, rating) {
+  const newResultRef = ref(database, `surveyResults/${Date.now()}`);
+  set(newResultRef, {
+    videoIndex: videoIndex,
+    x: rating.x,
+    y: rating.y,
+    timestamp: new Date().toISOString(),
+  }).then(() => {
+    console.log("Ergebnis erfolgreich gespeichert.");
+  }).catch((error) => {
+    console.error("Fehler beim Speichern des Ergebnisses:", error);
+  });
+}
+
+// Klick auf das Emotion-Rad
 ratingCanvas.addEventListener("click", (event) => {
   const rect = ratingCanvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -93,19 +112,24 @@ ratingCanvas.addEventListener("click", (event) => {
   nextButton.disabled = false;
 });
 
+// Weiter-Button
 nextButton.addEventListener("click", () => {
-  userRatings.push(userRating);
-  userRating = null;
+  if (userRating) {
+    saveResult(currentStep, userRating);
+    userRatings.push(userRating);
+    userRating = null;
 
-  if (currentStep < videos.length - 1) {
-    currentStep++;
-    loadQuestion();
-  } else {
-    incrementSurveyCount();
-    showScreen(endScreen);
+    if (currentStep < videos.length - 1) {
+      currentStep++;
+      loadQuestion();
+    } else {
+      incrementSurveyCount();
+      showScreen(endScreen);
+    }
   }
 });
 
+// Frage laden
 function loadQuestion() {
   updateProgress();
   videoPlayer.src = videos[currentStep];
@@ -116,13 +140,14 @@ function loadQuestion() {
   showScreen(questionScreen);
 }
 
+// Start-Button
 document.getElementById("start-button").addEventListener("click", () => {
   currentStep = 0;
   userRatings = [];
   loadQuestion();
 });
 
-// Increment the survey count in Firebase Realtime Databas
+// Umfragezähler inkrementieren
 function incrementSurveyCount() {
   const surveyCountRef = ref(database, "surveyCount");
 
@@ -134,6 +159,6 @@ function incrementSurveyCount() {
       set(surveyCountRef, 1);
     }
   }).catch((error) => {
-    console.error("Error updating survey count:", error);
+    console.error("Fehler beim Aktualisieren des Umfragezählers:", error);
   });
 }
