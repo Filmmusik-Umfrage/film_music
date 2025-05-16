@@ -1,31 +1,31 @@
-/* Globale Stile */
+/* Grundlegendes Layout */
 body {
-  font-family: 'Cinzel', serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #000000, #333333);
-  color: #ffffff;
+  background-color: #f0f0f0;
+  overflow-y: auto;
 }
 
 #app {
   width: 90%;
   max-width: 800px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 100px auto;
+  margin: 80px auto;
   box-sizing: border-box;
-  color: #fff;
 }
 
-/* Fortschrittsbalken */
 #progress-bar-container {
   width: 100%;
   height: 20px;
-  background: #555;
+  background: #e0e0e0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
   position: fixed;
   top: 0;
   left: 0;
@@ -34,16 +34,17 @@ body {
 
 #progress-bar {
   height: 100%;
-  background: #FFD700;
+  background: #76c7c0;
   transition: width 0.3s ease;
+  flex: 1;
 }
 
 #progress-text {
-  margin-left: 10px;
+  font-size: 1rem;
   font-weight: bold;
+  color: #333;
 }
 
-/* Screens */
 .screen {
   display: none;
   text-align: center;
@@ -59,50 +60,43 @@ body {
 
 #start-screen h1,
 #end-screen h1 {
-  font-size: 2rem;
-  margin-bottom: 15px;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
 }
 
 button {
-  padding: 15px 30px;
+  padding: 10px 20px;
   font-size: 1rem;
-  color: #000;
+  color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
 }
 
 button:hover {
-  background: #FFD700;
+  opacity: 0.9;
 }
 
 #start-button {
-  background: #FFD700;
+  background: #76c7c0;
 }
 
 #next-button {
   background: #007BFF;
 }
 
-#restart-button {
-  background: #FF4500;
-}
-
-/* Canvas */
 #rating-canvas {
-  border: 2px solid #FFD700;
+  border: 1px solid #ccc;
   width: 100%;
   max-width: 500px;
   height: 500px;
+  background-color: #f0f0f0;
   margin: 20px auto;
-  background: #333;
-  position: relative;
 }
 
 #selected-emotion {
-  margin-top: 15px;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #FFD700;
+  text-align: center;
+  font-size: 1rem;
+  margin: 20px 0;
 }
