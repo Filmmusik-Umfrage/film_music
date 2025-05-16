@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filmmusik Umfrage</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Fortschrittsbalken -->
@@ -16,28 +17,25 @@
   <div id="app">
     <!-- Startseite -->
     <div id="start-screen" class="screen active">
-      <div class="overlay">
-        <h1>🎬 Willkommen zur Filmmusik-Umfrage 🎵</h1>
-        <p>Erleben Sie die Magie der Filmmusik und teilen Sie Ihre Gefühle zu den Videos.</p>
-        <button id="start-button" class="primary-button">Start</button>
-      </div>
+      <h1>🎥 Willkommen zur Filmmusik-Umfrage</h1>
+      <p>Erleben Sie Musik und Emotionen in der Welt des Films. Bitte bewerten Sie Ihre Gefühle nach dem Ansehen jedes Videos.</p>
+      <button id="start-button">Umfrage starten</button>
     </div>
 
     <!-- Frage-Seite -->
     <div id="question-screen" class="screen">
-      <h2>🎥 Video {currentStep + 1} von {videos.length}</h2>
       <video id="video-player" controls></video>
       <canvas id="rating-canvas"></canvas>
-      <p id="tooltip">Klicken Sie auf das Rad, um Ihre Emotion zu markieren.</p>
-      <button id="next-button" class="primary-button" disabled>Weiter</button>
+      <p id="selected-emotion">Bitte klicken Sie auf das Rad, um Ihre Emotion zu speichern.</p>
+      <div id="rating-hint">🔍 Klicken Sie, um eine Emotion auszuwählen.</div>
+      <button id="next-button" disabled>Weiter ➡️</button>
     </div>
 
     <!-- Endseite -->
     <div id="end-screen" class="screen">
-      <div class="overlay">
-        <h1>✨ Vielen Dank! ✨</h1>
-        <p>Sie haben die Umfrage erfolgreich abgeschlossen. Ihre Meinung ist uns wichtig!</p>
-      </div>
+      <h1>🎬 Vielen Dank!</h1>
+      <p>Sie haben die Umfrage erfolgreich abgeschlossen. Ihre Teilnahme trägt zur Forschung in der Filmmusik bei.</p>
+      <button id="restart-button">Zurück zur Startseite</button>
     </div>
   </div>
 

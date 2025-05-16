@@ -1,15 +1,24 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+import { getDatabase, ref, set, update, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
+// Firebase-Konfiguration
 const firebaseConfig = {
-  // Firebase-Konfiguration
+  apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
+  authDomain: "filmmusik-umfrage.firebaseapp.com",
+  databaseURL: "https://filmmusik-umfrage-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "filmmusik-umfrage",
+  storageBucket: "filmmusik-umfrage.filestorage.app",
+  messagingSenderId: "933950539609",
+  appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
 };
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+// Platzhalter für Videos
 const videos = [
-  // Video-URLs
+  "https://example.com/video1.mp4",
+  "https://example.com/video2.mp4",
 ];
 
 let currentStep = 0;
@@ -23,7 +32,8 @@ const endScreen = document.getElementById("end-screen");
 const videoPlayer = document.getElementById("video-player");
 const ratingCanvas = document.getElementById("rating-canvas");
 const nextButton = document.getElementById("next-button");
-const tooltip = document.getElementById("tooltip");
+const selectedEmotionText = document.getElementById("selected-emotion");
+const restartButton = document.getElementById("restart-button");
 
 const ctx = ratingCanvas.getContext("2d");
 let userRating = null;
@@ -44,13 +54,19 @@ function drawEmotionWheel() {
   const centerY = ratingCanvas.height / 2;
   const radius = Math.min(centerX, centerY) - 20;
 
-  ctx.fillStyle = "#2c2c2c";
+  ctx.clearRect(0, 0, ratingCanvas.width, ratingCanvas.height);
+  ctx.fillStyle = "#333";
   ctx.fillRect(0, 0, ratingCanvas.width, ratingCanvas.height);
 
-  ctx.strokeStyle = "#f9a602";
+  ctx.strokeStyle = "#FFD700";
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.stroke();
+}
+
+function saveResult(videoIndex, rating) {
+  const newResultRef = ref(database, `surveyResults/${Date.now()}`);
+  set(newResultRef, { videoIndex, x: rating.x, y: rating.y, timestamp: new Date().toISOString() });
 }
 
 ratingCanvas.addEventListener("click", (event) => {
@@ -63,12 +79,12 @@ ratingCanvas.addEventListener("click", (event) => {
   userRating = { x: x - centerX, y: y - centerY };
 
   drawEmotionWheel();
-  ctx.fillStyle = "#e50914";
+  ctx.fillStyle = "#FFD700";
   ctx.beginPath();
   ctx.arc(x, y, 5, 0, Math.PI * 2);
   ctx.fill();
 
-  tooltip.textContent = "Emotion gespeichert!";
+  selectedEmotionText.textContent = "Emotion gespeichert!";
   nextButton.disabled = false;
 });
 
@@ -82,40 +98,10 @@ nextButton.addEventListener("click", () => {
       currentStep++;
       loadQuestion();
     } else {
-      incrementSurveyCount();
       showScreen(endScreen);
     }
   }
 });
-
-document.getElementById("start-button").addEventListener("click", () => {
-  currentStep = 0;
-  userRatings = [];
-  loadQuestion();
-});
-
-function saveResult(videoIndex, rating) {
-  const newResultRef = ref(database, `surveyResults/${Date.now()}`);
-  set(newResultRef, {
-    videoIndex: videoIndex,
-    x: rating.x,
-    y: rating.y,
-    timestamp: new Date().toISOString(),
-  });
-}
-
-function incrementSurveyCount() {
-  const surveyCountRef = ref(database, "surveyCount");
-
-  get(surveyCountRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const currentCount = snapshot.val();
-      update(surveyCountRef, { ".value": currentCount + 1 });
-    } else {
-      set(surveyCountRef, 1);
-    }
-  });
-}
 
 function loadQuestion() {
   updateProgress();
@@ -123,6 +109,16 @@ function loadQuestion() {
   videoPlayer.play();
   drawEmotionWheel();
   nextButton.disabled = true;
-  tooltip.textContent = "Bitte wählen Sie eine Emotion.";
+  selectedEmotionText.textContent = "Bitte wählen Sie eine Emotion.";
   showScreen(questionScreen);
 }
+
+document.getElementById("start-button").addEventListener("click", () => {
+  currentStep = 0;
+  userRatings = [];
+  loadQuestion();
+});
+
+restartButton.addEventListener("click", () => {
+  showScreen(startScreen);
+});
