@@ -45,8 +45,8 @@ let userRating = null;
 // Fortschrittsanzeige aktualisieren
 function updateProgress() {
   const progress = ((currentStep + 1) / videos.length) * 100;
-  progressBar.style.width = ${progress}%;
-  progressText.textContent = ${Math.round(progress)}%;
+  progressBar.style.width = `${progress}%`;
+  progressText.textContent = `${Math.round(progress)}%`;
 }
 
 // Bildschirm wechseln
@@ -79,7 +79,7 @@ function drawEmotionWheel() {
 
 // Ergebnisse speichern
 function saveResult(videoIndex, rating) {
-  const newResultRef = ref(database, surveyResults/${Date.now()});
+  const newResultRef = ref(database, `surveyResults/${Date.now()}`);
   set(newResultRef, {
     videoIndex: videoIndex,
     x: rating.x,
