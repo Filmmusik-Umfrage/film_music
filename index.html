@@ -16,23 +16,28 @@
   <div id="app">
     <!-- Startseite -->
     <div id="start-screen" class="screen active">
-      <h1>Willkommen zur Umfrage über Filmmusik</h1>
-      <p>Vielen Dank, dass Sie an dieser Umfrage teilnehmen. Sie werden Videos sehen und anschließend Ihre Emotionen anhand eines Rades markieren.</p>
-      <button id="start-button">Start</button>
+      <div class="overlay">
+        <h1>🎬 Willkommen zur Filmmusik-Umfrage 🎵</h1>
+        <p>Erleben Sie die Magie der Filmmusik und teilen Sie Ihre Gefühle zu den Videos.</p>
+        <button id="start-button" class="primary-button">Start</button>
+      </div>
     </div>
 
     <!-- Frage-Seite -->
     <div id="question-screen" class="screen">
-      <video id="video-player" width="100%" controls></video>
+      <h2>🎥 Video {currentStep + 1} von {videos.length}</h2>
+      <video id="video-player" controls></video>
       <canvas id="rating-canvas"></canvas>
-      <p id="selected-emotion">Bitte wählen Sie Ihre Emotion durch Klicken auf das Rad aus.</p>
-      <button id="next-button" disabled>Weiter</button>
+      <p id="tooltip">Klicken Sie auf das Rad, um Ihre Emotion zu markieren.</p>
+      <button id="next-button" class="primary-button" disabled>Weiter</button>
     </div>
 
     <!-- Endseite -->
     <div id="end-screen" class="screen">
-      <h1>Vielen Dank!</h1>
-      <p>Sie haben die Umfrage erfolgreich abgeschlossen.</p>
+      <div class="overlay">
+        <h1>✨ Vielen Dank! ✨</h1>
+        <p>Sie haben die Umfrage erfolgreich abgeschlossen. Ihre Meinung ist uns wichtig!</p>
+      </div>
     </div>
   </div>
 
