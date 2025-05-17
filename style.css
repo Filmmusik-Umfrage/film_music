@@ -1,10 +1,10 @@
-/* Grundlegendes Layout */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #000000;
   overflow-y: auto;
+  color: #ffffff; /* Textfarbe Weiß */
 }
 
 #app {
@@ -16,6 +16,7 @@ body {
   padding: 20px;
   margin: 80px auto;
   box-sizing: border-box;
+  color: #ffffff; /* Textfarbe Weiß */
 }
 
 #progress-bar-container {
@@ -42,12 +43,13 @@ body {
 #progress-text {
   font-size: 1rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #ffffff; /* Textfarbe Weiß */
 }
 
 .screen {
   display: none;
   text-align: center;
+  color: #ffffff; /* Textfarbe Weiß */
 }
 
 .screen.active {
@@ -62,12 +64,13 @@ body {
 #end-screen h1 {
   font-size: 1.8rem;
   margin-bottom: 10px;
+  color: #ffffff; /* Textfarbe Weiß */
 }
 
 button {
   padding: 10px 20px;
   font-size: 1rem;
-  color: #fff;
+  color: #ffffff; /* Textfarbe Weiß */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -76,6 +79,7 @@ button {
 
 button:hover {
   opacity: 0.9;
+  color: #ffffff; /* Textfarbe bleibt Weiß */
 }
 
 #start-button {
@@ -99,4 +103,5 @@ button:hover {
   text-align: center;
   font-size: 1rem;
   margin: 20px 0;
+  color: #ffffff; /* Textfarbe Weiß */
 }
