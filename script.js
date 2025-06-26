@@ -9,14 +9,14 @@ function shuffleArray(arr) {
 const videos = [
   "210748_small.mp4",
   "146944-790648611_medium.mp4",
-  "Umfrage_Video_1.mp4",
+  "Umfrage_Video_1_neu.mp4",
   "keinVideo.mp4"
 ];
 const songs = [
-  "Filmmusik_4.wav",
+  "Filmmusik_4_neu.wav",
   "", // <-- kein Song für das zweite Video
-  "Filmmusik_2.wav",
-  "Filmmusik_3.wav"
+  "Filmmusik_2_neu.wav",
+  "Filmmusik_3_neu.wav"
 ];
 
 // Arrays mischen, damit Reihenfolge zufällig ist
