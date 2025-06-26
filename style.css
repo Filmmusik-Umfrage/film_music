@@ -384,7 +384,7 @@ select {
   #valenceArousalCanvas {
     width: 200px !important; /* Kleineres Canvas */
     height: 200px !important; /* Kleineres Canvas */
-    margin-top: 10rem !important; /* Angepasste Margins für Mobilgeräte */
+    margin-top: 20rem !important; /* Angepasste Margins für Mobilgeräte */
   }
 
   #vaCoordinates {
