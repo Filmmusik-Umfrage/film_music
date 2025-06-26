@@ -1,107 +1,384 @@
+/* Grundlayout */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #000000;
-  overflow-y: auto;
-  color: #ffffff; /* Textfarbe Weiß */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, sans-serif; /* Neue Schriftart */
+  background: #000;
+  color: #fff;
 }
 
 #app {
-  width: 90%;
   max-width: 800px;
-  background: #000000;
+  margin: 40px auto;
+  background: transparent;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin: 80px auto;
+  padding: 20px 1em; /* <-- sorgt für 1em Abstand links und rechts */
   box-sizing: border-box;
-  color: #ffffff; /* Textfarbe Weiß */
+  text-align: center;
 }
 
-#progress-bar-container {
-  width: 100%;
-  height: 20px;
-  background: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
+#start-screen {
+  position: relative;
+  overflow: hidden;
+  /* background: none;  <-- falls du hier einen Hintergrund hast, entferne ihn */
 }
 
-#progress-bar {
-  height: 100%;
-  background: #76c7c0;
-  transition: width 0.3s ease;
-  flex: 1;
-}
-
-#progress-text {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #ffffff; /* Textfarbe Weiß */
-}
-
+/* Screens */
 .screen {
   display: none;
-  text-align: center;
-  color: #ffffff; /* Textfarbe Weiß */
 }
 
 .screen.active {
+  display: block;
+}
+
+/* Startscreen mit Canvas Overlay */
+#start-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+#animationCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0;
+  background: radial-gradient(circle, #000000, #121212);
+}
+
+/* Start-Content oben ausrichten */
+.start-content {
+  position: relative;
+  z-index: 10;
+  max-width: 1100px; /* noch breiter */
+  padding: 0 30px 30px 30px;
+  margin-top: 0;
+  align-self: flex-start;
+}
+
+.start-content h1 {
+  font-size: 2.1rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  margin-top: 0px;    /* weiter oben */
+}
+
+.start-content p {
+  line-height: 1.3;
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Buttons */
+button {
+  background-color: #ffffff;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: #4aa8a2;
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button#next-button {
+  margin-bottom: 0 !important;
+  position: absolute; /* Positionierung relativ zum Canvas */
+  top: calc(72%); /* 20px Abstand unterhalb des Canvas */
+  left: 50%; /* Zentriert den Button horizontal */
+  transform: translateX(-50%); /* Korrigiert die Zentrierung */
+  display: none; /* Standardmäßig ausgeblendet */
+}
+
+/* Video */
+#video-player {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  background: #000;
+  margin: 0 auto 2em auto;
+  object-fit: contain;
+  position: relative; /* Stellt sicher, dass das Video als Bezugspunkt für den Text dient */
+}
+
+/* Valence-Arousal Canvas Styling */
+#valenceArousalCanvas {
+  width: 500px !important;
+  height: 500px !important;
+  position: absolute; /* Positionierung relativ zum übergeordneten Container */
+ margin-top: 15rem !important; /* Verschiebt das Canvas etwas weiter nach unten */
+  left: 50%; /* Horizontale Zentrierung */
+  transform: translate(-50%, -50%); /* Korrigiert die Zentrierung */
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+#vaCoordinates {
+  font-size: 2rem !important; /* Schriftgröße für Valence-Arousal-Koordinaten vergrößert und priorisiert */
+  color: #fff;
+  text-align: center;
+  margin-top: 10px;
+  user-select: none;
+  margin-bottom: 2rem;
+}
+
+/* Formulare */
+form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-#start-screen h1,
-#end-screen h1 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: #ffffff; /* Textfarbe Weiß */
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: #ffffff; /* Textfarbe Weiß */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-button:hover {
-  opacity: 0.9;
-  color: #ffffff; /* Textfarbe bleibt Weiß */
-}
-
-#start-button {
-  background: #76c7c0;
-}
-
-#next-button {
-  background: #007BFF;
-}
-
-#rating-canvas {
-  border: 1px solid #ccc;
-  width: 100%;
   max-width: 500px;
-  height: 500px;
-  background-color: #f0f0f0;
-  margin: 20px auto;
+  width: 100%;
+  margin: 0 auto;
+  gap: 15px;
+  color: #fff;
+  text-align: left;
 }
 
-#selected-emotion {
-  text-align: center;
-  font-size: 1rem;
-  margin: 20px 0;
-  color: #ffffff; /* Textfarbe Weiß */
+form label {
+  margin-bottom: 10px; /* kleinerer Abstand zwischen den Fragen */
+  display: flex;
+  flex-direction: column;
 }
+
+form label > select,
+form label > input,
+form label > textarea {
+  margin-top: 8px; /* größerer Abstand zwischen Frage und Auswahlfeld */
+}
+
+select {
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width:1200px) {
+  #valenceArousalCanvas {
+    margin-top: 5rem;
+    width: 500px !important;
+    height: 500px !important;
+  }
+
+  .start-content {
+    padding: 30px 15px;
+  }
+
+  #video-player {
+    max-height: 40vh;
+  }
+
+  #video-question {
+    position: absolute; /* Beibehaltung der absoluten Positionierung */
+    top: 10px; /* Abstand über dem Video */
+    left: 50%; /* Zentriert den Text horizontal */
+    transform: translateX(-50%);
+    font-size: 1.4rem !important; /* Schriftgröße vergrößert und priorisiert */
+  }
+}
+@media (min-width:1200px) {
+  #valenceArousalCanvas {
+    margin-top: 20rem !important;
+    width: 600px !important;
+    height: 600px !important;
+  }
+
+  button#next-button {
+    position: absolute; /* Positionierung relativ zum Canvas */
+    top: calc(87%); /* 40px Abstand unterhalb des Canvas */
+    left: 50%; /* Zentriert den Button horizontal */
+    transform: translateX(-50%); /* Korrigiert die Zentrierung */
+    display: none; /* Standardmäßig ausgeblendet */
+  }
+}
+@media (max-width: 1200px) {
+  .start-content {
+    max-width: 98vw;
+    padding: 0 5vw 30px 5vw;
+  }
+}
+
+@media (min-width: 800px) {
+  #video-player {
+    width: 350%;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  #video-player {
+    width: calc(80vw - 20px); /* Reduziert die Breite um 20px für Abstand */
+    max-width: calc(80vw - 20px);
+    height: auto;
+    margin:  0; /* Fügt 10px Abstand links und rechts hinzu */
+    padding: 0;
+    margin-top: 7rem;
+    object-fit: cover;
+    position: fixed;
+    left: 10rem; /* Stellt sicher, dass der Abstand links eingehalten wird */
+    top: 0; /* Optional: Falls das Video auch oben fixiert sein soll */
+  }
+
+  #video-question {
+    text-align: center;
+    font-size: 2rem !important; /* Schriftgröße vergrößert und priorisiert */
+    color: #fff;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    position: absolute; /* Positioniert den Text über dem Video */
+    top: 2rem; /* Abstand vom oberen Rand des Containers */
+    left: 50%; /* Zentriert den Text horizontal */
+    transform: translateX(-50%); /* Korrigiert die Zentrierung */
+    z-index: 10; /* Hebt den Text über das Video */
+    margin-bottom: 1rem;
+  }
+}
+
+#instrument-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 62px 0 16px 0; /* Abstand oben und unten reduziert */
+  min-height: 220px;
+}
+
+#end-instrument-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 62px 0 16px 0;
+  min-height: 220px;
+}
+
+/* Aufwendiger Reveal-Effekt für Instrumentenbilder */
+.instrument-img {
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(0.85) rotate(-8deg) translateY(40px);
+  transition:
+    opacity 1.1s cubic-bezier(.4,1.2,.4,1),
+    filter 1.1s cubic-bezier(.4,1.2,.4,1),
+    transform 1.1s cubic-bezier(.4,1.2,.4,1);
+}
+
+.instrument-img.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1) rotate(0deg) translateY(0);
+}
+
+.music-note {
+  position: absolute;
+  font-size: 2.2rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: note-float 1.6s ease-out forwards;
+}
+
+@keyframes note-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.7) rotate(-10deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-60px) scale(1.1) rotate(10deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-90px) scale(1.2) rotate(20deg);
+  }
+}
+
+/* Container für Bild und Noten */
+.instrument-img-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 260px;
+  height: 260px;
+  overflow: visible;
+}
+
+.music-note-img {
+  position: absolute;
+  width: 22px;   /* kleiner als vorher */
+  height: 22px;
+  filter: invert(1);
+  opacity: 0;
+  pointer-events: none;
+  animation: note-float-up 1.3s ease-out forwards;
+}
+
+@keyframes note-float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.7);
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-70px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-110px) scale(1.2);
+  }
+}
+
+.sound-wave {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  opacity: 0.7;
+  left: 485px;              /* noch weiter rechts */
+  bottom: 120px;
+  pointer-events: none;
+  animation: wave-expand 1.8s cubic-bezier(0.4,0,0.2,1) forwards; /* langsamer */
+}
+
+@keyframes wave-expand {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+
