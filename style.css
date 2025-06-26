@@ -382,9 +382,13 @@ select {
 }
 @media (max-width: 768px) {
   #valenceArousalCanvas {
-    width: 200px !important; /* Kleineres Canvas */
-    height: 200px !important; /* Kleineres Canvas */
-    margin: 0 auto!important; /* Angepasste Margins für Mobilgeräte */
+    width: 200px !important;
+    height: 200px !important;
+    margin: 0 auto; /* Zentrierung */
+    position: relative; /* Entfernt absolute Positionierung */
+    top: 50%; /* Zentriert vertikal */
+    left: 50%; /* Zentriert horizontal */
+    transform: translate(-50%, -50%); /* Exakte Zentrierung */
   }
 
   #vaCoordinates {
