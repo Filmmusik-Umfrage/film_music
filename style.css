@@ -383,8 +383,8 @@ select {
 @media (max-width: 768px) {
   
   #valenceArousalCanvas {
-    width: 450px !important;
-    height: 450px !important;
+    width: 5000px !important;
+    height: 500px !important;
     left: 50%; /* Horizontale Zentrierung */
     
   }
