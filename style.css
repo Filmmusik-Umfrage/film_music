@@ -380,5 +380,16 @@ select {
     transform: scale(2.2);
   }
 }
+@media (max-width: 768px) {
+  #valenceArousalCanvas {
+    width: 300px !important; /* Kleineres Canvas */
+    height: 300px !important; /* Kleineres Canvas */
+    margin-top: 2rem !important; /* Angepasste Margins für Mobilgeräte */
+  }
+
+  #vaCoordinates {
+    font-size: 1.5rem !important; /* Reduzierte Schriftgröße */
+  }
+}
 
 
