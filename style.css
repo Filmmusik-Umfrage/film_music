@@ -380,15 +380,5 @@ select {
     transform: scale(2.2);
   }
 }
-@media (max-width: 768px) {
-  
-  #valenceArousalCanvas {
-    width: 5000px !important;
-    height: 500px !important;
-    left: 50%; /* Horizontale Zentrierung */
-    
-  }
-
-}
 
 
