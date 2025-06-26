@@ -385,6 +385,7 @@ select {
   #valenceArousalCanvas {
     width: 375px !important;
     height: 375px !important;
+    left: 50%;
     
   }
 
