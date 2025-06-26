@@ -383,8 +383,8 @@ select {
 @media (max-width: 768px) {
   
   #valenceArousalCanvas {
-    width: 300px !important;
-    height: 300px !important;
+    width: 350px !important;
+    height: 350px !important;
     
   }
 
