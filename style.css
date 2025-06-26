@@ -380,5 +380,13 @@ select {
     transform: scale(2.2);
   }
 }
+@media (max-width: 768px) {
+  
+  #valenceArousalCanvas {
+    width: 460px !important;
+    height: 4600px !important;
+    
+  }
 
+}
 
