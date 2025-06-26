@@ -9,7 +9,7 @@ function shuffleArray(arr) {
 const videos = [
   "210748_small.mp4",
   "146944-790648611_medium.mp4",
-  "Umfrage_Video_1_neu.mp4",
+  "Umfrage_Video_1_neu.mov",
   "keinVideo.mp4"
 ];
 const songs = [
