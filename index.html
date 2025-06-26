@@ -1,41 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Filmmusik Umfrage</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Fortschrittsbalken -->
-  <div id="progress-bar-container">
-    <div id="progress-bar"></div>
-    <span id="progress-text">0%</span>
-  </div>
-
   <div id="app">
-    <!-- Startseite -->
+    <!-- Startseite mit Canvas Animation -->
     <div id="start-screen" class="screen active">
-      <h1>Willkommen zur Umfrage über Filmmusik</h1>
-      <p>Vielen Dank, dass Sie an dieser Umfrage teilnehmen. Sie werden Videos sehen und anschließend Ihre Emotionen anhand eines Rades markieren.</p>
-      <button id="start-button">Start</button>
+      <div class="start-content">
+        <h1>Willkommen zur Filmmusik-Umfrage</h1>
+        <p>
+          Vielen Dank, dass Sie an dieser Umfrage teilnehmen! <br><br>
+          Ziel dieser Umfrage ist es, herauszufinden, wie verschiedene Filmmusiken auf die Emotionen der Zuhörer wirken. 
+          Im Verlauf der Umfrage werden Ihnen kurze Videos mit unterschiedlicher Filmmusik gezeigt. Nach jedem Video bitten wir Sie, Ihre empfundenen Emotionen mithilfe eines Modells (Valenz-Arousal-Modell) auf einer Skala auszuwählen.<br><br>
+          Am Ende stellen wir Ihnen noch ein paar allgemeine Fragen zu Ihrem Musikgeschmack und Ihrer Erfahrung mit Filmmusik. <br><br>
+          Die Umfrage dauert nur wenige Minuten und Ihre Angaben werden selbstverständlich anonym behandelt.<br><br>
+        </p>
+        <button id="start-button">Start</button>
+        <div id="instrument-container"></div>
+      </div>
     </div>
 
     <!-- Frage-Seite -->
     <div id="question-screen" class="screen">
-      <video id="video-player" width="100%" controls></video>
-      <canvas id="rating-canvas"></canvas>
-      <p id="selected-emotion">Bitte wählen Sie Ihre Emotion durch Klicken auf das Rad aus.</p>
-      <button id="next-button" disabled>Weiter</button>
+      <video id="video-player" controls style="display:none;"></video>
+      <p id="video-question" style="text-align:center; font-family: Arial, sans-serif; font-size:18px; color: #fff; margin-top:10px; display:none;">Wie wirkt die Szene?</p>
+
+      <!-- Valence-Arousal Modell -->
+      <div style="width:400px; margin: 20px auto; position: relative;">
+        <canvas id="valenceArousalCanvas" width="400" height="400" style="border-radius: 12px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none;"></canvas>
+        <div id="vaCoordinates" style="text-align:center; font-family: Arial, sans-serif; font-size:16px; color: #fff; margin-top:10px; user-select:none;"></div>
+      </div>
+
+      <button id="next-button" style="display:none;" disabled>Weiter</button>
+    </div>
+
+    <!-- Zusätzliche Fragen -->
+    <div id="extra-questions-screen" class="screen">
+      <h2>Ein paar Fragen an Sie</h2>
+      <form id="extra-questions-form">
+        <label>Wie oft hören Sie Filmmusik?
+          <select name="frequency" required>
+            <option value="">Bitte wählen</option>
+            <option value="täglich">Täglich</option>
+            <option value="wöchentlich">Wöchentlich</option>
+            <option value="monatlich">Monatlich</option>
+            <option value="selten">Selten</option>
+          </select>
+        </label>
+
+        <label>Welches Genre der Filmmusik mögen Sie am liebsten?
+          <select name="genre" required>
+            <option value="">Bitte wählen</option>
+            <option value="klassisch">Klassisch</option>
+            <option value="episch">Episch/Orchestrisch</option>
+            <option value="elektronisch">Elektronisch</option>
+            <option value="jazz">Jazz</option>
+            <option value="andere">Andere</option>
+          </select>
+        </label>
+
+        <label>Welche Bedeutung hat Filmmusik für Ihr Filmerlebnis?
+          <select name="importance" required>
+            <option value="">Bitte wählen</option>
+            <option value="sehr_wichtig">Sehr wichtig</option>
+            <option value="wichtig">Wichtig</option>
+            <option value="neutral">Neutral</option>
+            <option value="weniger_wichtig">Weniger wichtig</option>
+          </select>
+        </label>
+
+        <label>Spielen Sie selbst ein Instrument?
+          <select name="instrument_experience" required>
+            <option value="">Bitte wählen</option>
+            <option value="ja">Ja</option>
+            <option value="nein">Nein</option>
+          </select>
+        </label>
+
+        <label>Wie alt sind Sie?
+          <input type="number" name="age" min="10" max="99" required placeholder="Alter">
+        </label>
+
+        <label>Wie häufig besuchen Sie Konzerte oder Musikveranstaltungen?
+          <select name="concert_frequency" required>
+            <option value="">Bitte wählen</option>
+            <option value="oft">Oft</option>
+            <option value="manchmal">Manchmal</option>
+            <option value="selten">Selten</option>
+            <option value="nie">Nie</option>
+          </select>
+        </label>
+
+        <label>Wie stark beeinflusst Musik generell Ihre Stimmung?
+          <select name="music_affect" required>
+            <option value="">Bitte wählen</option>
+            <option value="sehr_stark">Sehr stark</option>
+            <option value="stark">Stark</option>
+            <option value="etwas">Etwas</option>
+            <option value="kaum">Kaum</option>
+            <option value="gar_nicht">Gar nicht</option>
+          </select>
+        </label>
+
+        <label>Haben Sie eine musikalische Ausbildung (z.B. Musikschule, Studium)?
+          <select name="musical_education" required>
+            <option value="">Bitte wählen</option>
+            <option value="keine">Keine</option>
+            <option value="grundlegend">Grundlegend (z.B. Musikunterricht in der Schule)</option>
+            <option value="fortgeschritten">Fortgeschritten (z.B. Musikschule, Verein)</option>
+            <option value="professionell">Professionell (z.B. Studium, Berufsmusiker/in)</option>
+          </select>
+        </label>
+
+        <button type="submit">Absenden</button>
+      </form>
     </div>
 
     <!-- Endseite -->
     <div id="end-screen" class="screen">
       <h1>Vielen Dank!</h1>
       <p>Sie haben die Umfrage erfolgreich abgeschlossen.</p>
+      
+      <div id="end-instrument-container"></div> <!-- Container für die Animation -->
     </div>
   </div>
 
-  <script src="script.js" type="module"></script>
+  <audio id="background-audio"></audio>
+  <script src="script.js"></script>
 </body>
 </html>
