@@ -382,15 +382,12 @@ select {
 }
 @media (max-width: 768px) {
   #valenceArousalCanvas {
-    width: 90vw !important;
-    height: 90vw !important;
-    max-width: 98vw !important;
-    max-height: 70vw !important;
+    width: 375px !important;
+    height: 375px !important;
     left: 50%;
-    top: unset;
-    margin-top: 2rem !important;
-    transform: translateX(-50%);
-    position: relative;
-    display: block;
+    top: 50%; /* Hinzugefügt für vertikale Zentrierung */
+    transform: translate(-50%, -50%); /* Hinzugefügt für perfekte Zentrierung */
+    margin-top: 0 !important; /* Überschreibt evtl. margin-top */
+    position: absolute; /* Sicherstellen, dass absolute Positionierung gilt */
   }
 }
