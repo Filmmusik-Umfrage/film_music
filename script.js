@@ -451,7 +451,7 @@ valenceArousalCanvas.addEventListener("click", (event) => {
   drawValenceArousalModel(q);
 
   vaCtx.beginPath();
-  vaCtx.arc(x, y, 10, 0, Math.PI * 2);
+  vaCtx.arc(x, y, 6, 0, Math.PI * 2); // kleinerer Pointer
   vaCtx.fillStyle = "#ff4500";
   vaCtx.shadowColor = "rgba(255, 69, 0, 0.7)";
   vaCtx.shadowBlur = 10;
