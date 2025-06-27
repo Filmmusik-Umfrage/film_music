@@ -495,6 +495,15 @@ document.getElementById("start-button").addEventListener("click", () => {
 
   // Das erste Video abspielen
   videoPlayer.src = videos[currentStep];
+
+  // Mobil-Check und ggf. stummschalten
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
+    videoPlayer.muted = true;
+  } else {
+    videoPlayer.muted = false;
+  }
+
   videoPlayer.style.display = "block";
   videoPlayer.play();
 
@@ -602,6 +611,15 @@ nextButton.addEventListener("click", () => {
     valenceArousalCanvas.style.display = "none";
     videoPlayer.style.display = "block";
     videoPlayer.src = videos[currentStep];
+
+    // Mobil-Check und ggf. stummschalten
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
+      videoPlayer.muted = true;
+    } else {
+      videoPlayer.muted = false;
+    }
+
     videoPlayer.play();
 
     // Dynamisch den Text setzen basierend auf den Bedingungen
@@ -867,4 +885,6 @@ if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
 } else {
   videoPlayer.muted = false;
 }
+
+videoPlayer.play();
 
