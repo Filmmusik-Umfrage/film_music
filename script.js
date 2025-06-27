@@ -602,6 +602,7 @@ nextButton.addEventListener("click", () => {
     video: videos[currentStep],
     valence: parseFloat(userRating.valence),
     arousal: parseFloat(userRating.arousal),
+    song: songs[currentStep] // <--- Song hinzufügen
   });
 
   // Suche nächsten gültigen Step
