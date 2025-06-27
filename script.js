@@ -711,6 +711,38 @@ extraQuestionsForm.addEventListener("submit", (e) => {
   `;
 
   startEndScreenAnimation(); // Animation direkt starten
+
+  // Firebase: Daten speichern
+  import { initializeApp } from "firebase/app";
+  import { getDatabase, ref, push } from "firebase/database";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
+    authDomain: "filmmusik-umfrage.firebaseapp.com",
+    databaseURL: "https://filmmusik-umfrage-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "filmmusik-umfrage",
+    storageBucket: "filmmusik-umfrage.firebasestorage.app",
+    messagingSenderId: "933950539609",
+    appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
+    measurementId: "G-Y5312Z41S9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ... später im Submit-Handler:
+  const dataToSave = {
+    timestamp: Date.now(),
+    ratings: userRatings,
+    extra: extraAnswers
+  };
+  push(ref(db, 'responses'), dataToSave)
+    .then(() => {
+      console.log("Daten erfolgreich gespeichert!");
+    })
+    .catch((error) => {
+      console.error("Fehler beim Speichern in Firebase:", error);
+    });
 });
 
 // Funktion zur Animation auf der Endseite
