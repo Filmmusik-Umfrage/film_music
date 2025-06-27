@@ -381,9 +381,12 @@ select {
   }
 }
 @media (max-width: 768px) {
+  
   #valenceArousalCanvas {
     width: 365px !important;
     height: 365px !important;
+    
+    
   }
 
   button#next-button {
@@ -391,13 +394,14 @@ select {
   }
 
   #vaCoordinates {
-    max-width: 75vw;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 92vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
     word-break: break-word;
     overflow-wrap: break-word;
-    box-sizing: border-box;
-    padding-left: 8px;
-    padding-right: 8px;
   }
+  
 }
