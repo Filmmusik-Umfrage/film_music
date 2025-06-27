@@ -690,13 +690,22 @@ nextButton.addEventListener("click", () => {
 });
 
 // Animation starten, wenn die Endseite angezeigt wird
-extraQuestionsForm.addEventListener("submit", (e) => {
+extraQuestionsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(extraQuestionsForm);
-
   const extraAnswers = Object.fromEntries(formData.entries());
-  console.log("Bewertungen Valence-Arousal:", userRatings);
-  console.log("Zusatzfragen Antworten:", extraAnswers);
+
+  // Daten an Firestore senden
+  try {
+    await db.collection("umfrageAntworten").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      ratings: userRatings,
+      extra: extraAnswers
+    });
+    console.log("Daten erfolgreich gespeichert!");
+  } catch (err) {
+    console.error("Fehler beim Speichern in Firebase:", err);
+  }
 
   extraQuestionsScreen.classList.remove("active");
   extraQuestionsScreen.style.display = "none";
@@ -711,38 +720,6 @@ extraQuestionsForm.addEventListener("submit", (e) => {
   `;
 
   startEndScreenAnimation(); // Animation direkt starten
-
-  // Firebase: Daten speichern
-  import { initializeApp } from "firebase/app";
-  import { getDatabase, ref, push } from "firebase/database";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
-    authDomain: "filmmusik-umfrage.firebaseapp.com",
-    databaseURL: "https://filmmusik-umfrage-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "filmmusik-umfrage",
-    storageBucket: "filmmusik-umfrage.firebasestorage.app",
-    messagingSenderId: "933950539609",
-    appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
-    measurementId: "G-Y5312Z41S9"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // ... später im Submit-Handler:
-  const dataToSave = {
-    timestamp: Date.now(),
-    ratings: userRatings,
-    extra: extraAnswers
-  };
-  push(ref(db, 'responses'), dataToSave)
-    .then(() => {
-      console.log("Daten erfolgreich gespeichert!");
-    })
-    .catch((error) => {
-      console.error("Fehler beim Speichern in Firebase:", error);
-    });
 });
 
 // Funktion zur Animation auf der Endseite
@@ -906,6 +883,20 @@ function revealImagePixelPuzzle(imgSrc, container, duration = 1200, blockSize = 
     drawStep();
   };
 }
+
+// --- Firebase Konfiguration ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDXfMY9wlXRRvGGTrYLJ195LJZZhud4zDs",
+  authDomain: "filmmusik-umfrage.firebaseapp.com",
+  databaseURL: "https://filmmusik-umfrage-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "filmmusik-umfrage",
+  storageBucket: "filmmusik-umfrage.appspot.com",
+  messagingSenderId: "933950539609",
+  appId: "1:933950539609:web:c109e0d10c45d0aaffee48",
+  measurementId: "G-Y5312Z41S9"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // Nach videoPlayer.src = videos[currentStep];
 videoPlayer.src = videos[currentStep];
