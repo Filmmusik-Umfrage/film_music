@@ -382,9 +382,24 @@ select {
     transform: scale(2.2);
   }
 }
-
+@media (max-width: 768px) {
+  
+  #valenceArousalCanvas {
+    width: 365px !important;
+    height: 365px !important;
+    left: 60%;
+    top: 90%;
+  }
 
   button#next-button {
     top: calc(90%); /* weiter unten auf dem Bildschirm */
+  }
+}
+@media (max-width: 768px) {
+  #animationCanvas {
+    width: 90vw !important;
+    height: 90vh !important;
+    max-width: 90vw;
+    max-height: 90vh;
   }
 }
