@@ -690,6 +690,20 @@ nextButton.addEventListener("click", () => {
   }
 });
 
+// --- Cookie-Prüfung: Teilnahme nur einmal pro Browser ---
+function hasCompletedSurvey() {
+  return document.cookie.split(';').some(c => c.trim().startsWith('umfrageAbgeschlossen='));
+}
+
+// Wenn Cookie gesetzt, Umfrage blockieren
+if (hasCompletedSurvey()) {
+  document.getElementById("app").innerHTML = `
+    <div style="text-align:center; margin-top:100px;">
+      <h2>Sie haben bereits an der Umfrage teilgenommen.</h2>
+    </div>
+  `;
+}
+
 // Animation starten, wenn die Endseite angezeigt wird
 extraQuestionsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -704,6 +718,8 @@ extraQuestionsForm.addEventListener("submit", async (e) => {
       extra: extraAnswers
     });
     console.log("Daten erfolgreich gespeichert!");
+    // Cookie setzen: 1 Jahr gültig
+    document.cookie = "umfrageAbgeschlossen=true; max-age=31536000; path=/";
   } catch (err) {
     console.error("Fehler beim Speichern in Firebase:", err);
   }
