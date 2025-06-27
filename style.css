@@ -253,6 +253,37 @@ select {
   }
 }
 
+/* Mobile Optimierung für Canvas und Container */
+@media (max-width: 600px) {
+  #valenceArousalCanvas {
+    width: 95vw !important;
+    height: 95vw !important;
+    max-width: 98vw !important;
+    max-height: 98vw !important;
+    left: 50%;
+    margin-top: 2rem !important;
+    position: static;
+    transform: none;
+    display: block;
+  }
+  #question-screen > div[style*="width:400px"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    margin: 0 auto !important;
+    position: static !important;
+    padding: 0 2vw;
+  }
+  button#next-button {
+    position: static !important;
+    margin: 1.5rem auto 0 auto !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    display: none;
+  }
+}
+
 #instrument-container {
   display: flex;
   justify-content: center;
@@ -381,13 +412,12 @@ select {
   }
 }
 @media (max-width: 768px) {
+  
   #valenceArousalCanvas {
     width: 375px !important;
     height: 375px !important;
     left: 50%;
-    top: 50%; /* Hinzugefügt für vertikale Zentrierung */
-    transform: translate(-50%, -50%); /* Hinzugefügt für perfekte Zentrierung */
-    margin-top: 0 !important; /* Überschreibt evtl. margin-top */
-    position: absolute; /* Sicherstellen, dass absolute Positionierung gilt */
+    
   }
+
 }
