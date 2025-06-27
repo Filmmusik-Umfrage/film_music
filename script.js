@@ -495,6 +495,17 @@ document.getElementById("start-button").addEventListener("click", () => {
 
   // Das erste Video abspielen
   videoPlayer.src = videos[currentStep];
+
+  // >>>>> HIER: Mobil stumm für Umfrage_Video_1_neu.mp4 <<<<<
+  if (
+    videos[currentStep] === "Umfrage_Video_1_neu.mp4" &&
+    isMobile()
+  ) {
+    videoPlayer.muted = true;
+  } else {
+    videoPlayer.muted = false;
+  }
+
   videoPlayer.style.display = "block";
   videoPlayer.play();
 
@@ -506,12 +517,6 @@ document.getElementById("start-button").addEventListener("click", () => {
     backgroundAudio.src = songs[currentStep];
     backgroundAudio.currentTime = 0;
     backgroundAudio.volume = 0.6;
-    // Speziell für Umfrage_Video_1_neu.mp4 auf Mobilgeräten stumm schalten
-    if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile()) {
-      backgroundAudio.muted = true;
-    } else {
-      backgroundAudio.muted = false;
-    }
     backgroundAudio.play();
     videoQuestion.textContent = "Wie wirkt die Szene?";
   } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
@@ -608,6 +613,17 @@ nextButton.addEventListener("click", () => {
     valenceArousalCanvas.style.display = "none";
     videoPlayer.style.display = "block";
     videoPlayer.src = videos[currentStep];
+
+    // >>>>> HIER: Mobil stumm für Umfrage_Video_1_neu.mp4 <<<<<
+    if (
+      videos[currentStep] === "Umfrage_Video_1_neu.mp4" &&
+      isMobile()
+    ) {
+      videoPlayer.muted = true;
+    } else {
+      videoPlayer.muted = false;
+    }
+
     videoPlayer.play();
 
     // Dynamisch den Text setzen basierend auf den Bedingungen
@@ -617,12 +633,415 @@ nextButton.addEventListener("click", () => {
       backgroundAudio.src = songs[currentStep];
       backgroundAudio.currentTime = 0;
       backgroundAudio.volume = 0.6;
-      // Speziell für Umfrage_Video_1_neu.mp4 auf Mobilgeräten stumm schalten
-      if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile()) {
-        backgroundAudio.muted = true;
-      } else {
-        backgroundAudio.muted = false;
+      backgroundAudio.play();
+      videoQuestion.textContent = "Wie wirkt die Szene?";
+    } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
+      // Fall: Video ohne Musik
+      backgroundAudio.pause();
+      backgroundAudio.src = "";
+      videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
+    } else if (videos[currentStep] === "keinVideo.mp4" && songs[currentStep]) {
+      // Fall: Musik ohne Bild
+      backgroundAudio.src = songs[currentStep];
+      backgroundAudio.currentTime = 0;
+      backgroundAudio.volume = 0.6;
+      backgroundAudio.play();
+      videoPlayer.style.display = "none";
+      videoQuestion.textContent = "Wie wirkt die Musik ohne Bild?";
+      videoQuestion.style.display = "block"; // Sicherstellen, dass der Text angezeigt wird
+
+      // Button "Auswahl treffen" erstellen und anzeigen
+      const selectionButton = document.createElement("button");
+      selectionButton.textContent = "Auswahl treffen";
+      selectionButton.style.display = "inline-block";
+      selectionButton.style.marginTop = "20px";
+      selectionButton.style.padding = "10px 20px";
+      selectionButton.style.fontSize = "16px";
+      selectionButton.style.cursor = "pointer";
+      questionScreen.appendChild(selectionButton);
+
+      // Event Listener für den Button
+      selectionButton.addEventListener("click", () => {
+        valenceArousalCanvas.style.display = "block";
+        drawValenceArousalModel();
+        nextButton.style.display = "inline-block"; // Button anzeigen
+        nextButton.disabled = false;
+        selectionButton.style.display = "none"; // Auswahl-Button ausblenden
+      });
+    } else {
+      // Fallback: Falls keine der Bedingungen zutrifft
+      videoQuestion.textContent = "Keine gültige Szene verfügbar.";
+    }
+
+    userRating = null;
+    nextButton.style.display = "none"; // Button wieder ausblenden
+    nextButton.disabled = true;
+    vaCoordinates.textContent = "";
+
+    // Nach dem Video wieder Standardfarben anzeigen
+    drawValenceArousalModel();
+  } else {
+    backgroundAudio.pause();
+    backgroundAudio.currentTime = 0;
+    // Nur die Fragen-Seite anzeigen, alles andere ausblenden
+    questionScreen.classList.remove("active");
+    questionScreen.style.display = "none";
+    valenceArousalCanvas.style.display = "none";
+    videoPlayer.style.display = "none";
+    extraQuestionsScreen.classList.add("active");
+    extraQuestionsScreen.style.display = "block";
+  }
+});
+
+// Animation starten, wenn die Endseite angezeigt wird
+extraQuestionsForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const formData = new FormData(extraQuestionsForm);
+
+  const extraAnswers = Object.fromEntries(formData.entries());
+  console.log("Bewertungen Valence-Arousal:", userRatings);
+  console.log("Zusatzfragen Antworten:", extraAnswers);
+
+  extraQuestionsScreen.classList.remove("active");
+  extraQuestionsScreen.style.display = "none";
+  endScreen.classList.add("active");
+  endScreen.style.display = "flex";
+  endScreen.innerHTML = `
+    <div style="margin:auto; text-align:center;">
+      <h1 style="color:#fff; font-size:2.2rem; margin-bottom:1rem;">Vielen Dank!</h1>
+      <p style="font-size:1.2rem; color:#fff;">Sie haben die Umfrage erfolgreich abgeschlossen.</p>
+      <div id="end-instrument-container"></div>
+    </div>
+  `;
+
+  startEndScreenAnimation(); // Animation direkt starten
+});
+
+// Funktion zur Animation auf der Endseite
+function startEndScreenAnimation() {
+  const endInstrumentContainer = document.getElementById('end-instrument-container');
+  endInstrumentContainer.innerHTML = '';
+  showInstrumentImages(endInstrumentContainer); // Erste Animation direkt starten
+  setInterval(() => {
+    showInstrumentImages(endInstrumentContainer);
+  }, 3000); // Wiederholende Animation alle 3 Sekunden
+}
+
+// --- Reveal Bild mit Partikeln ---
+function revealImageWithParticles(imgSrc, container, duration = 1200, particleCount = 900) {
+  container.innerHTML = "";
+
+  // Bild vorbereiten (unsichtbar)
+  const img = new Image();
+  img.src = imgSrc;
+  img.style.display = "none";
+  img.width = 260;
+  img.height = 260;
+  container.appendChild(img);
+
+  // Canvas für Partikel
+  const canvas = document.createElement("canvas");
+  canvas.width = 260;
+  canvas.height = 260;
+  canvas.style.position = "absolute";
+  canvas.style.top = "0";
+  canvas.style.left = "0";
+  canvas.style.pointerEvents = "none";
+  container.appendChild(canvas);
+
+  img.onload = () => {
+    // Bild auf Canvas zeichnen, um Pixel zu lesen
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+    // Partikel erzeugen
+    let particles = [];
+    let tries = 0;
+    while (particles.length < particleCount && tries < particleCount * 3) {
+      tries++;
+      let x = Math.floor(Math.random() * canvas.width);
+      let y = Math.floor(Math.random() * canvas.height);
+      let idx = (y * canvas.width + x) * 4;
+      if (imageData[idx + 3] > 40) { // nur sichtbare Pixel
+        particles.push({
+          sx: Math.random() * canvas.width, // Startpunkt: zufällig
+          sy: canvas.height + 40 + Math.random() * 40, // Start unterhalb
+          tx: x,
+          ty: y,
+          color: `rgba(${imageData[idx]},${imageData[idx+1]},${imageData[idx+2]},${imageData[idx+3]/255})`,
+          progress: 0
+        });
       }
+    }
+
+    // Animation
+    let start = null;
+    function animate(ts) {
+      if (!start) start = ts;
+      let elapsed = ts - start;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let done = true;
+      for (let p of particles) {
+        p.progress = Math.min(1, elapsed / duration + Math.random() * 0.12);
+        // Ease-out
+        let ease = 1 - Math.pow(1 - p.progress, 2.5);
+        let px = p.sx + (p.tx - p.sx) * ease;
+        let py = p.sy + (p.ty - p.sy) * ease;
+        ctx.globalAlpha = Math.min(1, p.progress * 1.2);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.2 + Math.random() * 1.1, 0, 2 * Math.PI);
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8 * (1 - p.progress);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        if (p.progress < 1) done = false;
+      }
+      ctx.globalAlpha = 1;
+
+      if (!done) {
+        requestAnimationFrame(animate);
+      } else {
+        img.style.display = "block";
+        canvas.remove();
+      }
+    }
+    animate();
+  };
+}
+
+// --- Reveal Bild Puzzle-Effekt ---
+function revealImagePixelPuzzle(imgSrc, container, duration = 1200, blockSize = 4) {
+  container.innerHTML = "";
+
+  // Bild vorbereiten (unsichtbar)
+  const img = new Image();
+  img.src = imgSrc;
+  img.style.display = "none";
+  img.width = 260;
+  img.height = 260;
+  container.appendChild(img);
+
+  // Canvas für Puzzle-Effekt
+  const canvas = document.createElement("canvas");
+  canvas.width = 260;
+  canvas.height = 260;
+  canvas.style.position = "absolute";
+  canvas.style.top = "0";
+  canvas.style.left = "0";
+  canvas.style.pointerEvents = "none";
+  container.appendChild(canvas);
+
+  img.onload = () => {
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    // Blöcke vorbereiten
+    let blocks = [];
+    for (let y = 0; y < canvas.height; y += blockSize) {
+      for (let x = 0; x < canvas.width; x += blockSize) {
+        blocks.push({ x, y });
+      }
+    }
+    // Reihenfolge mischen für Puzzle-Effekt
+    for (let i = blocks.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+    }
+
+    const blocksPerFrame = Math.ceil(blocks.length / (duration / 16));
+    let revealed = 0;
+
+    function drawStep() {
+      for (let i = 0; i < blocksPerFrame && revealed < blocks.length; i++, revealed++) {
+        const { x, y } = blocks[revealed];
+        const w = Math.min(blockSize, canvas.width - x);
+        const h = Math.min(blockSize, canvas.height - y);
+        // Block aus Bilddaten holen und zeichnen
+        ctx.putImageData(
+          ctx.getImageData(x, y, w, h),
+          x, y
+        );
+      }
+      if (revealed < blocks.length) {
+        requestAnimationFrame(drawStep);
+      } else {
+        img.style.display = "block";
+        canvas.remove();
+      }
+    }
+    // Canvas leeren und Animation starten
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStep();
+  };
+}
+
+// Funktion zum Überprüfen, ob das Gerät mobil ist
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
+// --- Video und Screens Steuerung ---
+document.getElementById("start-button").addEventListener("click", () => {
+  startScreen.classList.remove("active");
+  startScreen.style.display = "none";
+  questionScreen.classList.add("active");
+  questionScreen.style.display = "block";
+
+  // Animation stoppen
+  if (typeof instrumentInterval !== "undefined") clearInterval(instrumentInterval);
+  instrumentContainer.innerHTML = "";
+
+  // Suche ersten gültigen Step
+  currentStep = findNextValidStep(0);
+  if (currentStep === -1) {
+    document.getElementById("video-question").textContent = "Keine gültige Szene verfügbar.";
+    return;
+  }
+
+  // Das erste Video abspielen
+  videoPlayer.src = videos[currentStep];
+
+  // >>>>> HIER: Mobil stumm für Umfrage_Video_1_neu.mp4 <<<<<
+  if (
+    videos[currentStep] === "Umfrage_Video_1_neu.mp4" &&
+    isMobile()
+  ) {
+    videoPlayer.muted = true;
+  } else {
+    videoPlayer.muted = false;
+  }
+
+  videoPlayer.style.display = "block";
+  videoPlayer.play();
+
+  // Dynamisch den Text setzen basierend auf den Bedingungen
+  const videoQuestion = document.getElementById("video-question");
+
+  if (videos[currentStep] !== "keinVideo.mp4" && songs[currentStep]) {
+    // Fall: Video mit Musik
+    backgroundAudio.src = songs[currentStep];
+    backgroundAudio.currentTime = 0;
+    backgroundAudio.volume = 0.6;
+    backgroundAudio.play();
+    videoQuestion.textContent = "Wie wirkt die Szene?";
+  } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
+    // Fall: Video ohne Musik
+    backgroundAudio.pause();
+    backgroundAudio.src = "";
+    videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
+  } else if (videos[currentStep] === "keinVideo.mp4" && songs[currentStep]) {
+    // Fall: Musik ohne Bild
+    backgroundAudio.src = songs[currentStep];
+    backgroundAudio.currentTime = 0;
+    backgroundAudio.volume = 0.6;
+    backgroundAudio.play();
+    videoPlayer.style.display = "none";
+    videoQuestion.textContent = "Wie wirkt die Musik ohne Bild?";
+
+    // Button "Auswahl treffen" erstellen und anzeigen
+    const selectionButton = document.createElement("button");
+    selectionButton.textContent = "Auswahl treffen";
+    selectionButton.style.display = "inline-block";
+    selectionButton.style.marginTop = "20px";
+    selectionButton.style.padding = "10px 20px";
+    selectionButton.style.fontSize = "16px";
+    selectionButton.style.cursor = "pointer";
+    questionScreen.appendChild(selectionButton);
+
+    // Event Listener für den Button
+    selectionButton.addEventListener("click", () => {
+      valenceArousalCanvas.style.display = "block";
+      drawValenceArousalModel();
+      nextButton.style.display = "inline-block"; // Button anzeigen
+      nextButton.disabled = false;
+      selectionButton.style.display = "none"; // Auswahl-Button ausblenden
+    });
+  } else {
+    // Fallback: Falls keine der Bedingungen zutrifft
+    // Sicherstellen, dass immer eine gültige Szene angezeigt wird
+    if (videos[currentStep] === "keinVideo.mp4") {
+      // Wenn kein Video vorhanden ist, aber keine Musik, wähle ein Video mit Musik
+      videos[currentStep] = videos.find(video => video !== "keinVideo.mp4");
+      songs[currentStep] = songs.find(song => song !== "");
+      videoPlayer.src = videos[currentStep];
+      backgroundAudio.src = songs[currentStep];
+      backgroundAudio.currentTime = 0;
+      backgroundAudio.volume = 0.6;
+      backgroundAudio.play();
+      videoQuestion.textContent = "Wie wirkt die Szene?";
+    } else {
+      // Standardfall: Video ohne Musik
+      backgroundAudio.pause();
+      backgroundAudio.src = "";
+      videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
+    }
+  }
+
+  videoQuestion.style.display = "block";
+});
+
+videoPlayer.addEventListener("ended", () => {
+  videoPlayer.style.display = "none";
+  valenceArousalCanvas.style.display = "block";
+  drawValenceArousalModel();
+
+  // Text anzeigen, wenn KEIN Song vorhanden ist
+  const videoQuestion = document.getElementById("video-question");
+  if (!songs[currentStep] && videos[currentStep] !== "keinVideo.mp4") {
+    videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
+  } else if (videos[currentStep] === "keinVideo.mp4") {
+    videoQuestion.textContent = "Wie wirkt die Musik ohne Bild?";
+  } else {
+    videoQuestion.textContent = "Wie wirkt die Szene?";
+  }
+
+  nextButton.style.display = "none"; // Button ausblenden, bis geklickt wird
+  nextButton.disabled = true;
+
+  backgroundAudio.pause();
+  backgroundAudio.currentTime = 0;
+});
+
+nextButton.addEventListener("click", () => {
+  if (!userRating) return alert("Bitte wählen Sie einen Punkt im Valence-Arousal Modell aus.");
+
+  userRatings.push({
+    video: videos[currentStep],
+    valence: parseFloat(userRating.valence),
+    arousal: parseFloat(userRating.arousal),
+  });
+
+  // Suche nächsten gültigen Step
+  currentStep = findNextValidStep(currentStep + 1);
+
+  if (currentStep !== -1) {
+    valenceArousalCanvas.style.display = "none";
+    videoPlayer.style.display = "block";
+    videoPlayer.src = videos[currentStep];
+
+    // >>>>> HIER: Mobil stumm für Umfrage_Video_1_neu.mp4 <<<<<
+    if (
+      videos[currentStep] === "Umfrage_Video_1_neu.mp4" &&
+      isMobile()
+    ) {
+      videoPlayer.muted = true;
+    } else {
+      videoPlayer.muted = false;
+    }
+
+    videoPlayer.play();
+
+    // Dynamisch den Text setzen basierend auf den Bedingungen
+    const videoQuestion = document.getElementById("video-question");
+    if (videos[currentStep] !== "keinVideo.mp4" && songs[currentStep]) {
+      // Fall: Video mit Musik
+      backgroundAudio.src = songs[currentStep];
+      backgroundAudio.currentTime = 0;
+      backgroundAudio.volume = 0.6;
       backgroundAudio.play();
       videoQuestion.textContent = "Wie wirkt die Szene?";
     } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
