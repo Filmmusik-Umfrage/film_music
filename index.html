@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Filmmusik Umfrage</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="app">
@@ -127,7 +127,25 @@
       
       <div id="end-instrument-container"></div> <!-- Container für die Animation -->
     </div>
+  </div> <!-- Ende #app -->
+
+  <!-- Datenschutzhinweis Modal -->
+  <div id="privacy-modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#222; color:#fff; padding:30px 22px; border-radius:10px; max-width:420px; margin:auto; box-shadow:0 4px 24px #000;">
+      <h3 style="margin-top:0;">Datenschutzhinweis</h3>
+      <p style="font-size:1em; color:#ccc;">
+        Diese Umfrage speichert keine personenbezogenen Daten wie Name, E-Mail-Adresse oder IP-Adresse. Die Teilnahme ist anonym.<br>
+        Die Antworten werden ausschließlich für wissenschaftliche Zwecke ausgewertet und nicht an Dritte weitergegeben.<br>
+        Zur Sicherstellung, dass jede Person nur einmal teilnehmen kann, wird ein technisches Cookie gesetzt. Dieses Cookie enthält keine personenbezogenen Daten und dient ausschließlich der Verhinderung von Mehrfachteilnahmen.<br>
+        Mit dem Ausfüllen der Umfrage erklärst du dich mit der beschriebenen Datenverarbeitung einverstanden.
+      </p>
+      <button id="close-privacy-modal" style="margin-top:18px;">Schließen</button>
+    </div>
   </div>
+
+  <footer style="text-align:center; margin-top:30px; color:#aaa; font-size:0.95em;">
+    <a href="#" id="privacy-link" style="color:#aaa; text-decoration:underline; cursor:pointer;">Datenschutzhinweis</a>
+  </footer>
 
   <audio id="background-audio"></audio>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
