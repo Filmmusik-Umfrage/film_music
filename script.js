@@ -506,19 +506,13 @@ document.getElementById("start-button").addEventListener("click", () => {
     backgroundAudio.src = songs[currentStep];
     backgroundAudio.currentTime = 0;
     backgroundAudio.volume = 0.6;
-    backgroundAudio.muted = false; // wichtig für mobile Geräte
-    backgroundAudio.load();
-    backgroundAudio.play().catch(() => {
-      // Falls play() fehlschlägt, z.B. wegen Autoplay-Restriktionen
-      const audioBtn = document.createElement("button");
-      audioBtn.textContent = "Musik starten";
-      audioBtn.style.marginTop = "20px";
-      audioBtn.onclick = () => {
-        backgroundAudio.play();
-        audioBtn.remove();
-      };
-      questionScreen.appendChild(audioBtn);
-    });
+    // Speziell für Umfrage_Video_1_neu.mp4 auf Mobilgeräten stumm schalten
+    if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile()) {
+      backgroundAudio.muted = true;
+    } else {
+      backgroundAudio.muted = false;
+    }
+    backgroundAudio.play();
     videoQuestion.textContent = "Wie wirkt die Szene?";
   } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
     // Fall: Video ohne Musik
@@ -623,19 +617,13 @@ nextButton.addEventListener("click", () => {
       backgroundAudio.src = songs[currentStep];
       backgroundAudio.currentTime = 0;
       backgroundAudio.volume = 0.6;
-      backgroundAudio.muted = false; // wichtig für mobile Geräte
-      backgroundAudio.load();
-      backgroundAudio.play().catch(() => {
-        // Falls play() fehlschlägt, z.B. wegen Autoplay-Restriktionen
-        const audioBtn = document.createElement("button");
-        audioBtn.textContent = "Musik starten";
-        audioBtn.style.marginTop = "20px";
-        audioBtn.onclick = () => {
-          backgroundAudio.play();
-          audioBtn.remove();
-        };
-        questionScreen.appendChild(audioBtn);
-      });
+      // Speziell für Umfrage_Video_1_neu.mp4 auf Mobilgeräten stumm schalten
+      if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile()) {
+        backgroundAudio.muted = true;
+      } else {
+        backgroundAudio.muted = false;
+      }
+      backgroundAudio.play();
       videoQuestion.textContent = "Wie wirkt die Szene?";
     } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
       // Fall: Video ohne Musik
