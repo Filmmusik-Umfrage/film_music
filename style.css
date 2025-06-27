@@ -381,15 +381,20 @@ select {
   }
 }
 @media (max-width: 768px) {
-  
   #valenceArousalCanvas {
-    width: 375px !important;
-    height: 375px !important;
+    width: 95vw !important;
+    height: 95vw !important;
+    max-width: 375px !important;
+    max-height: 375px !important;
     left: 50%;
-    
+    margin-top: 2rem !important;
   }
-
   button#next-button {
-    top: calc(90%); /* weiter unten auf dem Bildschirm */
+    top: calc(100% + 20px); /* Button unter das Canvas */
+    position: static;
+    margin: 1.5rem auto 0 auto;
+    transform: none;
+    left: auto;
+    display: block;
   }
 }
