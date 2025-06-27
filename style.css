@@ -117,13 +117,15 @@ button#next-button {
 
 /* Valence-Arousal Canvas Styling */
 #valenceArousalCanvas {
-  width: 500px !important;
-  height: 500px !important;
-  position: absolute; /* Positionierung relativ zum übergeordneten Container */
- margin-top: 15rem !important; /* Verschiebt das Canvas etwas weiter nach unten */
-  left: 50%; /* Horizontale Zentrierung */
-  transform: translate(-50%, -50%); /* Korrigiert die Zentrierung */
-  border: none;
+  width: 400px;
+  height: 400px;
+  max-width: 95vw;
+  max-height: 95vw;
+  position: absolute;
+  margin-top: 2rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -383,10 +385,16 @@ select {
 @media (max-width: 768px) {
   
   #valenceArousalCanvas {
-    width: 365px !important;
-    height: 365px !important;
-    left: 60%;
-    top: 90%;
+    width: 90vw !important;
+    height: 90vw !important;
+    max-width: 95vw !important;
+    max-height: 95vw !important;
+    margin-top: 1rem !important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
+    display: block;
   }
 
   button#next-button {
