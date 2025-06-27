@@ -117,18 +117,19 @@ button#next-button {
 
 /* Valence-Arousal Canvas Styling */
 #valenceArousalCanvas {
-  width: 400px;
-  height: 400px;
-  max-width: 95vw;
-  max-height: 95vw;
+  width: 90vw !important;
+  height: 90vw !important;
+  max-width: 400px !important;
+  max-height: 400px !important;
   position: absolute;
-  margin-top: 2rem;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
+  border: none;
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  margin-top: 0 !important;
 }
 
 #vaCoordinates {
@@ -198,9 +199,8 @@ select {
 }
 @media (min-width:1200px) {
   #valenceArousalCanvas {
-    margin-top: 20rem !important;
-    width: 600px !important;
-    height: 600px !important;
+    max-width: 600px !important;
+    max-height: 600px !important;
   }
 
   button#next-button {
@@ -382,20 +382,7 @@ select {
     transform: scale(2.2);
   }
 }
-@media (max-width: 768px) {
-  
-  #valenceArousalCanvas {
-    width: 90vw !important;
-    height: 90vw !important;
-    max-width: 95vw !important;
-    max-height: 95vw !important;
-    margin-top: 1rem !important;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    position: relative;
-    display: block;
-  }
+
 
   button#next-button {
     top: calc(90%); /* weiter unten auf dem Bildschirm */
