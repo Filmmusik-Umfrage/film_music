@@ -857,4 +857,18 @@ function revealImagePixelPuzzle(imgSrc, container, duration = 1200, blockSize = 
   };
 }
 
+// --- Video und Audio Steuerung ---
+const videoElement = document.getElementById("video-player");
+const audioElement = document.getElementById("background-audio");
+
+// Funktion zum Abspielen von Video und Audio
+function playVideoAndAudio(videoSrc, audioSrc) {
+  videoElement.src = videoSrc;
+  audioElement.src = audioSrc;
+
+  // Video und Audio nach Bedarf anpassen
+  videoElement.muted = false; // Video-Audio aktiv
+  audioElement.play();        // Song abspielen
+  videoElement.play();        // Video abspielen (falls noch nicht)
+}
 
