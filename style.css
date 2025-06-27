@@ -117,19 +117,16 @@ button#next-button {
 
 /* Valence-Arousal Canvas Styling */
 #valenceArousalCanvas {
-  width: 90vw !important;
-  height: 90vw !important;
-  max-width: 400px !important;
-  max-height: 400px !important;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 500px !important;
+  height: 500px !important;
+  position: absolute; /* Positionierung relativ zum übergeordneten Container */
+ margin-top: 15rem !important; /* Verschiebt das Canvas etwas weiter nach unten */
+  left: 50%; /* Horizontale Zentrierung */
+  transform: translate(-50%, -50%); /* Korrigiert die Zentrierung */
   border: none;
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  margin-top: 0 !important;
 }
 
 #vaCoordinates {
@@ -199,8 +196,9 @@ select {
 }
 @media (min-width:1200px) {
   #valenceArousalCanvas {
-    max-width: 600px !important;
-    max-height: 600px !important;
+    margin-top: 20rem !important;
+    width: 600px !important;
+    height: 600px !important;
   }
 
   button#next-button {
