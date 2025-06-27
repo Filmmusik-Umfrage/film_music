@@ -857,3 +857,14 @@ function revealImagePixelPuzzle(imgSrc, container, duration = 1200, blockSize = 
   };
 }
 
+// Nach videoPlayer.src = videos[currentStep];
+videoPlayer.src = videos[currentStep];
+
+// Mobil-Check
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
+  videoPlayer.muted = true;
+} else {
+  videoPlayer.muted = false;
+}
+
