@@ -389,4 +389,7 @@ select {
     
   }
 
+  button#next-button {
+    top: calc(90%); /* weiter unten auf dem Bildschirm */
+  }
 }
