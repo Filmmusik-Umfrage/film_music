@@ -406,3 +406,56 @@ select {
   }
   
 }
+
+/* Zusätzliche mobile Optimierung */
+@media (max-width: 600px) {
+  #app {
+    max-width: 100vw;
+    padding: 8px 0.5vw;
+    box-sizing: border-box;
+  }
+
+  .start-content {
+    padding: 0 2vw 20px 2vw;
+    max-width: 100vw;
+  }
+
+  #video-player {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0;
+    left: 0 !important;
+    position: static !important;
+  }
+
+  #valenceArousalCanvas {
+    width: 98vw !important;
+    height: 98vw !important;
+    min-width: 220px !important;
+    min-height: 220px !important;
+    max-width: 99vw !important;
+    max-height: 99vw !important;
+    margin-top: 2rem !important;
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative !important;
+  }
+
+  #vaCoordinates {
+    font-size: 1.1rem !important;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0 2vw;
+    max-width: 98vw;
+  }
+
+  .instrument-img,
+  .instrument-img-wrapper {
+    width: 48vw !important;
+    height: 48vw !important;
+    min-width: 120px !important;
+    min-height: 120px !important;
+    max-width: 98vw !important;
+    max-height: 98vw !important;
+  }
+}
