@@ -506,11 +506,10 @@ document.getElementById("start-button").addEventListener("click", () => {
     backgroundAudio.src = songs[currentStep];
     backgroundAudio.currentTime = 0;
     backgroundAudio.volume = 0.6;
-    backgroundAudio.muted = false; // <-- wichtig für mobile Geräte
-    backgroundAudio.load();        // <-- neu laden
+    backgroundAudio.muted = false; // wichtig für mobile Geräte
+    backgroundAudio.load();
     backgroundAudio.play().catch(() => {
       // Falls play() fehlschlägt, z.B. wegen Autoplay-Restriktionen
-      // Zeige einen Button zum Starten des Audios
       const audioBtn = document.createElement("button");
       audioBtn.textContent = "Musik starten";
       audioBtn.style.marginTop = "20px";
@@ -624,7 +623,19 @@ nextButton.addEventListener("click", () => {
       backgroundAudio.src = songs[currentStep];
       backgroundAudio.currentTime = 0;
       backgroundAudio.volume = 0.6;
-      backgroundAudio.play();
+      backgroundAudio.muted = false; // wichtig für mobile Geräte
+      backgroundAudio.load();
+      backgroundAudio.play().catch(() => {
+        // Falls play() fehlschlägt, z.B. wegen Autoplay-Restriktionen
+        const audioBtn = document.createElement("button");
+        audioBtn.textContent = "Musik starten";
+        audioBtn.style.marginTop = "20px";
+        audioBtn.onclick = () => {
+          backgroundAudio.play();
+          audioBtn.remove();
+        };
+        questionScreen.appendChild(audioBtn);
+      });
       videoQuestion.textContent = "Wie wirkt die Szene?";
     } else if (videos[currentStep] !== "keinVideo.mp4" && !songs[currentStep]) {
       // Fall: Video ohne Musik
