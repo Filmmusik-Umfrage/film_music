@@ -383,30 +383,13 @@ select {
 @media (max-width: 768px) {
   
   #valenceArousalCanvas {
-    width: 375px !important;
-    height: 375px !important;
+    width: 365px !important;
+    height: 365px !important;
     left: 50%;
     
   }
 
   button#next-button {
     top: calc(90%); /* weiter unten auf dem Bildschirm */
-  }
-}
-@media (max-width: 600px) {
-  #valenceArousalCanvas {
-    width: 85vw !important;
-    height: 85vw !important;
-    max-width: 85vw !important;
-    max-height: 85vw !important;
-    margin-top: 7rem !important;
-    left: 50%;
-    transform: translate(-50%, 0);
-    position: relative;
-    display: block;
-  }
-  .screen .start-content,
-  .screen {
-    padding: 0 !important;
   }
 }
