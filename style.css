@@ -1,9 +1,10 @@
 /* Grundlayout */
 body {
   margin: 0;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, sans-serif; /* Neue Schriftart */
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, sans-serif;
   background: #000;
   color: #fff;
+  overflow-x: hidden; /* Verhindert horizontales Scrollen */
 }
 
 #app {
