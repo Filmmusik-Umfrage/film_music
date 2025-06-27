@@ -928,3 +928,12 @@ if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
 
 videoPlayer.play();
 
+// --- Datenschutz-Modal ---
+document.getElementById("privacy-link")?.addEventListener("click", function(e) {
+  e.preventDefault();
+  document.getElementById("privacy-modal").style.display = "flex";
+});
+document.getElementById("close-privacy-modal")?.addEventListener("click", function() {
+  document.getElementById("privacy-modal").style.display = "none";
+});
+
