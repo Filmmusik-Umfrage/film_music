@@ -435,7 +435,7 @@ select {
     min-height: 180px !important;
     max-width: 98vw !important;
     max-height: 98vw !important;
-    margin-top: 1.5rem !important;
+    margin-top: 3.5rem !important;
     left: 50%;
     transform: translateX(-50%);
     position: relative !important;
