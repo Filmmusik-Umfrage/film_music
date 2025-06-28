@@ -574,7 +574,16 @@ document.getElementById("start-button").addEventListener("click", () => {
 });
 
 videoPlayer.addEventListener("ended", () => {
-  videoPlayer.style.display = "none";
+  // Prüfe, ob Mobilgerät (Viewport ≤ 600px)
+  const isMobileView = window.innerWidth <= 600;
+
+  // Video ausblenden auf Mobilgeräten, sonst wie gehabt
+  if (isMobileView) {
+    videoPlayer.style.display = "none";
+  } else {
+    videoPlayer.style.display = "none"; // Optional: Desktop auch ausblenden
+  }
+
   valenceArousalCanvas.style.display = "block";
   drawValenceArousalModel();
 
@@ -593,11 +602,6 @@ videoPlayer.addEventListener("ended", () => {
 
   backgroundAudio.pause();
   backgroundAudio.currentTime = 0;
-
-  // --- NEU: Auf Mobilgeräten Video-Fenster automatisch schließen ---
-  if (window.innerWidth <= 600) {
-    videoPlayer.style.display = "none";
-  }
 });
 
 nextButton.addEventListener("click", () => {
