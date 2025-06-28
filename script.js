@@ -580,6 +580,9 @@ videoPlayer.addEventListener("ended", () => {
   valenceArousalCanvas.style.display = "block";
   drawValenceArousalModel();
 
+  // Deutlicher Hinweistext für die Nutzer
+  vaCoordinates.textContent = "Bitte wählen Sie jetzt einen Punkt im Kreis, um Ihre Emotionen anzugeben.";
+
   // Text anzeigen, wenn KEIN Song vorhanden ist
   const videoQuestion = document.getElementById("video-question");
   if (!songs[currentStep] && videos[currentStep] !== "keinVideo.mp4") {
