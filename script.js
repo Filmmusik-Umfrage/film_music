@@ -32,6 +32,8 @@ const extraQuestionsScreen = document.getElementById("extra-questions-screen");
 const endScreen = document.getElementById("end-screen");
 
 const videoPlayer = document.getElementById("video-player");
+videoPlayer.setAttribute("playsinline", "");
+videoPlayer.setAttribute("webkit-playsinline", "");
 const backgroundAudio = document.getElementById("background-audio");
 const valenceArousalCanvas = document.getElementById("valenceArousalCanvas");
 const vaCtx = valenceArousalCanvas.getContext("2d");
@@ -920,13 +922,13 @@ videoPlayer.src = videos[currentStep];
 
 // Mobil-Check
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-// Nur auf Desktop anzeigen
-if (!isMobile) {
-  videoPlayer.style.display = "block";
-  videoPlayer.play();
+if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
+  videoPlayer.muted = true;
 } else {
-  videoPlayer.style.display = "none";
+  videoPlayer.muted = false;
 }
+
+videoPlayer.play();
 
 // --- Datenschutz-Modal ---
 document.getElementById("privacy-link")?.addEventListener("click", function(e) {
