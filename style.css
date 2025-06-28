@@ -1,462 +1,158 @@
-/* Grundlayout */
-body {
-  margin: 0;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, sans-serif;
-  background: #000;
-  color: #fff;
-  overflow-x: hidden; /* Verhindert horizontales Scrollen */
-}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filmmusik Umfrage</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Startseite mit Canvas Animation -->
+    <div id="start-screen" class="screen active">
+      <div class="start-content">
+        <h1>Willkommen zur Filmmusik-Umfrage</h1>
+        <p>
+          Vielen Dank, dass Sie an dieser Umfrage teilnehmen! <br><br>
+          Ziel dieser Umfrage ist es, herauszufinden, wie verschiedene Filmmusiken auf die Emotionen der Zuhörer wirken. 
+          Im Verlauf der Umfrage werden Ihnen kurze Videos mit unterschiedlicher Filmmusik gezeigt. Nach jedem Video bitten wir Sie, Ihre empfundenen Emotionen mithilfe eines Modells (Valenz-Arousal-Modell) auf einer Skala auszuwählen.<br><br>
+          Am Ende stellen wir Ihnen noch ein paar allgemeine Fragen zu Ihrem Musikgeschmack und Ihrer Erfahrung mit Filmmusik. <br><br>
+          Die Umfrage dauert nur wenige Minuten und Ihre Angaben werden selbstverständlich anonym behandelt.<br><br>
+        </p>
+        <button id="start-button">Start</button>
+        <div id="instrument-container"></div>
+        <!-- Datenschutzhinweis-Link und Modal NUR im Startscreen -->
+        <div style="margin-top:30px; color:#aaa; font-size:0.95em;">
+          <a href="#" id="privacy-link" style="color:#aaa; text-decoration:underline; cursor:pointer;">Datenschutzhinweis</a>
+        </div>
+        <div id="privacy-modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+          <div style="background:#222; color:#fff; padding:30px 22px; border-radius:10px; max-width:420px; margin:auto; box-shadow:0 4px 24px #000;">
+            <h3 style="margin-top:0;">Datenschutzhinweis</h3>
+            <p style="font-size:1em; color:#ccc;">
+              Diese Umfrage speichert keine personenbezogenen Daten wie Name, E-Mail-Adresse oder IP-Adresse. Die Teilnahme ist anonym.<br>
+              Die Antworten werden ausschließlich für wissenschaftliche Zwecke ausgewertet und nicht an Dritte weitergegeben.<br>
+              Zur Sicherstellung, dass jede Person nur einmal teilnehmen kann, wird ein technisches Cookie gesetzt. Dieses Cookie enthält keine personenbezogenen Daten und dient ausschließlich der Verhinderung von Mehrfachteilnahmen.<br>
+              Mit dem Ausfüllen der Umfrage erklärst du dich mit der beschriebenen Datenverarbeitung einverstanden.
+            </p>
+            <button id="close-privacy-modal" style="margin-top:18px;">Schließen</button>
+          </div>
+        </div>
+        <!-- Ende Datenschutzhinweis -->
+      </div>
+    </div>
 
-#app {
-  max-width: 800px;
-  margin: 40px auto;
-  background: transparent;
-  border-radius: 8px;
-  padding: 20px 1em; /* <-- sorgt für 1em Abstand links und rechts */
-  box-sizing: border-box;
-  text-align: center;
-}
+    <!-- Frage-Seite -->
+    <div id="question-screen" class="screen">
+      <video id="video-player" playsinline webkit-playsinline style="display:none;"></video>
+      <p id="video-question" style="text-align:center; font-family: Arial, sans-serif; font-size:18px; color: #fff; margin-top:10px; display:none;">Wie wirkt die Szene?</p>
 
-#start-screen {
-  position: relative;
-  overflow: hidden;
-  /* background: none;  <-- falls du hier einen Hintergrund hast, entferne ihn */
-}
+      <!-- Valence-Arousal Modell -->
+      <div style="width:400px; margin: 20px auto; position: relative;">
+        <canvas id="valenceArousalCanvas" width="400" height="400" style="border-radius: 12px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none;"></canvas>
+        <div id="vaCoordinates" style="text-align:center; font-family: Arial, sans-serif; font-size:16px; color: #fff; margin-top:10px; user-select:none;"></div>
+      </div>
 
-/* Screens */
-.screen {
-  display: none;
-}
+      <button id="next-button" style="display:none;" disabled>Weiter</button>
+    </div>
 
-.screen.active {
-  display: block;
-}
+    <!-- Zusätzliche Fragen -->
+    <div id="extra-questions-screen" class="screen">
+      <h2>Ein paar Fragen an Sie</h2>
+      <form id="extra-questions-form">
+        <label>Wie oft hören Sie Filmmusik?
+          <select name="frequency" required>
+            <option value="">Bitte wählen</option>
+            <option value="täglich">Täglich</option>
+            <option value="wöchentlich">Wöchentlich</option>
+            <option value="monatlich">Monatlich</option>
+            <option value="selten">Selten</option>
+          </select>
+        </label>
 
-/* Startscreen mit Canvas Overlay */
-#start-screen {
-  position: relative;
-  overflow: hidden;
-}
+        <label>Welches Genre der Filmmusik mögen Sie am liebsten?
+          <select name="genre" required>
+            <option value="">Bitte wählen</option>
+            <option value="klassisch">Klassisch</option>
+            <option value="episch">Episch/Orchestrisch</option>
+            <option value="elektronisch">Elektronisch</option>
+            <option value="jazz">Jazz</option>
+            <option value="andere">Andere</option>
+          </select>
+        </label>
 
-#animationCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 0;
-  background: radial-gradient(circle, #000000, #121212);
-}
+        <label>Welche Bedeutung hat Filmmusik für Ihr Filmerlebnis?
+          <select name="importance" required>
+            <option value="">Bitte wählen</option>
+            <option value="sehr_wichtig">Sehr wichtig</option>
+            <option value="wichtig">Wichtig</option>
+            <option value="neutral">Neutral</option>
+            <option value="weniger_wichtig">Weniger wichtig</option>
+          </select>
+        </label>
 
-/* Start-Content oben ausrichten */
-.start-content {
-  position: relative;
-  z-index: 10;
-  max-width: 1100px; /* noch breiter */
-  padding: 0 30px 30px 30px;
-  margin-top: 0;
-  align-self: flex-start;
-}
+        <label>Spielen Sie selbst ein Instrument?
+          <select name="instrument_experience" required>
+            <option value="">Bitte wählen</option>
+            <option value="ja">Ja</option>
+            <option value="nein">Nein</option>
+          </select>
+        </label>
 
-.start-content h1 {
-  font-size: 2.1rem;
-  margin-bottom: 1rem;
-  color: #ffffff;
-  margin-top: 0px;    /* weiter oben */
-}
+        <label>Wie alt sind Sie?
+          <input type="number" name="age" min="10" max="99" required placeholder="Alter">
+        </label>
 
-.start-content p {
-  line-height: 1.3;
-  font-size: 1.1rem;
-  color: #ccc;
-}
+        <label>Wie häufig besuchen Sie Konzerte oder Musikveranstaltungen?
+          <select name="concert_frequency" required>
+            <option value="">Bitte wählen</option>
+            <option value="oft">Oft</option>
+            <option value="manchmal">Manchmal</option>
+            <option value="selten">Selten</option>
+            <option value="nie">Nie</option>
+          </select>
+        </label>
 
-/* Buttons */
-button {
-  background-color: #ffffff;
-  border: none;
-  padding: 12px 25px;
-  font-size: 1.1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #000;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
+        <label>Wie stark beeinflusst Musik generell Ihre Stimmung?
+          <select name="music_affect" required>
+            <option value="">Bitte wählen</option>
+            <option value="sehr_stark">Sehr stark</option>
+            <option value="stark">Stark</option>
+            <option value="etwas">Etwas</option>
+            <option value="kaum">Kaum</option>
+            <option value="gar_nicht">Gar nicht</option>
+          </select>
+        </label>
 
-button:hover:not(:disabled) {
-  background-color: #4aa8a2;
-  color: #fff;
-}
+        <label>Haben Sie eine musikalische Ausbildung (z.B. Musikschule, Studium)?
+          <select name="musical_education" required>
+            <option value="">Bitte wählen</option>
+            <option value="keine">Keine</option>
+            <option value="grundlegend">Grundlegend (z.B. Musikunterricht in der Schule)</option>
+            <option value="fortgeschritten">Fortgeschritten (z.B. Musikschule, Verein)</option>
+            <option value="professionell">Professionell (z.B. Studium, Berufsmusiker/in)</option>
+          </select>
+        </label>
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+        <button type="submit">Absenden</button>
+      </form>
+    </div>
 
-button#next-button {
-  margin-bottom: 0 !important;
-  position: absolute; /* Positionierung relativ zum Canvas */
-  top: calc(72%); /* 20px Abstand unterhalb des Canvas */
-  left: 50%; /* Zentriert den Button horizontal */
-  transform: translateX(-50%); /* Korrigiert die Zentrierung */
-  display: none; /* Standardmäßig ausgeblendet */
-}
+    <!-- Endseite -->
+    <div id="end-screen" class="screen">
+      <h1>Vielen Dank!</h1>
+      <p>Sie haben die Umfrage erfolgreich abgeschlossen.</p>
+      
+      <div id="end-instrument-container"></div> <!-- Container für die Animation -->
+    </div>
+  </div> <!-- Ende #app -->
 
-/* Video */
-#video-player {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  max-height: 90vh;
-  background: #000;
-  margin: 0 auto 2em auto;
-  object-fit: contain;
-  position: relative; /* Stellt sicher, dass das Video als Bezugspunkt für den Text dient */
-}
+  <footer style="text-align:center; margin-top:30px; color:#aaa; font-size:0.95em;">
+    <!-- <a href="#" id="privacy-link" style="color:#aaa; text-decoration:underline; cursor:pointer;">Datenschutzhinweis</a> -->
+  </footer>
 
-/* Valence-Arousal Canvas Styling */
-#valenceArousalCanvas {
-  width: 500px !important;
-  height: 500px !important;
-  position: absolute; /* Positionierung relativ zum übergeordneten Container */
- margin-top: 15rem !important; /* Verschiebt das Canvas etwas weiter nach unten */
-  left: 50%; /* Horizontale Zentrierung */
-  transform: translate(-50%, -50%); /* Korrigiert die Zentrierung */
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
-
-#vaCoordinates {
-  font-size: 2rem !important; /* Schriftgröße für Valence-Arousal-Koordinaten vergrößert und priorisiert */
-  color: #fff;
-  text-align: center;
-  margin-top: 10px;
-  user-select: none;
-  margin-bottom: 2rem;
-}
-
-/* Formulare */
-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-  gap: 15px;
-  color: #fff;
-  text-align: left;
-}
-
-form label {
-  margin-bottom: 10px; /* kleinerer Abstand zwischen den Fragen */
-  display: flex;
-  flex-direction: column;
-}
-
-form label > select,
-form label > input,
-form label > textarea {
-  margin-top: 8px; /* größerer Abstand zwischen Frage und Auswahlfeld */
-}
-
-select {
-  margin-top: 5px;
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-  font-size: 1rem;
-}
-
-/* Responsive */
-@media (max-width:1200px) {
-  #valenceArousalCanvas {
-    margin-top: 5rem;
-    width: 500px !important;
-    height: 500px !important;
-  }
-
-  .start-content {
-    padding: 30px 15px;
-  }
-
-  #video-player {
-    max-height: 40vh;
-  }
-
-  #video-question {
-    position: absolute; /* Beibehaltung der absoluten Positionierung */
-    top: 10px; /* Abstand über dem Video */
-    left: 50%; /* Zentriert den Text horizontal */
-    transform: translateX(-50%);
-    font-size: 1.4rem !important; /* Schriftgröße vergrößert und priorisiert */
-  }
-}
-@media (min-width:1200px) {
-  #valenceArousalCanvas {
-    margin-top: 20rem !important;
-    width: 600px !important;
-    height: 600px !important;
-  }
-
-  button#next-button {
-    position: absolute; /* Positionierung relativ zum Canvas */
-    top: calc(87%); /* 40px Abstand unterhalb des Canvas */
-    left: 50%; /* Zentriert den Button horizontal */
-    transform: translateX(-50%); /* Korrigiert die Zentrierung */
-    display: none; /* Standardmäßig ausgeblendet */
-  }
-}
-@media (max-width: 1200px) {
-  .start-content {
-    max-width: 98vw;
-    padding: 0 5vw 30px 5vw;
-  }
-}
-
-@media (min-width: 800px) {
-  #video-player {
-    width: 350%;
-    max-width: 100%;
-    height: auto;
-    margin: 0;
-  }
-}
-
-@media (min-width: 1200px) {
-  #video-player {
-    width: calc(80vw - 20px); /* Reduziert die Breite um 20px für Abstand */
-    max-width: calc(80vw - 20px);
-    height: auto;
-    margin:  0; /* Fügt 10px Abstand links und rechts hinzu */
-    padding: 0;
-    margin-top: 7rem;
-    object-fit: cover;
-    position: fixed;
-    left: 10rem; /* Stellt sicher, dass der Abstand links eingehalten wird */
-    top: 0; /* Optional: Falls das Video auch oben fixiert sein soll */
-  }
-
-  #video-question {
-    text-align: center;
-    font-size: 2rem !important; /* Schriftgröße vergrößert und priorisiert */
-    color: #fff;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    position: absolute; /* Positioniert den Text über dem Video */
-    top: 2rem; /* Abstand vom oberen Rand des Containers */
-    left: 50%; /* Zentriert den Text horizontal */
-    transform: translateX(-50%); /* Korrigiert die Zentrierung */
-    z-index: 10; /* Hebt den Text über das Video */
-    margin-bottom: 1rem;
-  }
-}
-
-#instrument-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 62px 0 16px 0; /* Abstand oben und unten reduziert */
-  min-height: 220px;
-}
-
-#end-instrument-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 62px 0 16px 0;
-  min-height: 220px;
-}
-
-/* Aufwendiger Reveal-Effekt für Instrumentenbilder */
-.instrument-img {
-  width: 260px;
-  height: 260px;
-  object-fit: contain;
-  display: block;
-  opacity: 0;
-  filter: blur(10px);
-  transform: scale(0.85) rotate(-8deg) translateY(40px);
-  transition:
-    opacity 1.1s cubic-bezier(.4,1.2,.4,1),
-    filter 1.1s cubic-bezier(.4,1.2,.4,1),
-    transform 1.1s cubic-bezier(.4,1.2,.4,1);
-}
-
-.instrument-img.visible {
-  opacity: 1;
-  filter: blur(0);
-  transform: scale(1) rotate(0deg) translateY(0);
-}
-
-.music-note {
-  position: absolute;
-  font-size: 2.2rem;
-  opacity: 0;
-  pointer-events: none;
-  animation: note-float 1.6s ease-out forwards;
-}
-
-@keyframes note-float {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0.7) rotate(-10deg);
-  }
-  10% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-    transform: translateY(-60px) scale(1.1) rotate(10deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-90px) scale(1.2) rotate(20deg);
-  }
-}
-
-/* Container für Bild und Noten */
-.instrument-img-wrapper {
-  position: relative;
-  display: inline-block;
-  width: 260px;
-  height: 260px;
-  overflow: visible;
-}
-
-.music-note-img {
-  position: absolute;
-  width: 22px;   /* kleiner als vorher */
-  height: 22px;
-  filter: invert(1);
-  opacity: 0;
-  pointer-events: none;
-  animation: note-float-up 1.3s ease-out forwards;
-}
-
-@keyframes note-float-up {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0.7);
-  }
-  10% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-    transform: translateY(-70px) scale(1.1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-110px) scale(1.2);
-  }
-}
-
-.sound-wave {
-  position: absolute;
-  width: 70px;
-  height: 70px;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  opacity: 0.7;
-  left: 485px;              /* noch weiter rechts */
-  bottom: 120px;
-  pointer-events: none;
-  animation: wave-expand 1.8s cubic-bezier(0.4,0,0.2,1) forwards; /* langsamer */
-}
-
-@keyframes wave-expand {
-  0% {
-    opacity: 0.7;
-    transform: scale(0.5);
-  }
-  60% {
-    opacity: 0.5;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(2.2);
-  }
-}
-@media (max-width: 768px) {
-  
-  #valenceArousalCanvas {
-    width: 365px !important;
-    height: 365px !important;
-    
-    
-  }
-
-  button#next-button {
-    top: calc(90%); /* weiter unten auf dem Bildschirm */
-  }
-
-  #vaCoordinates {
-    max-width: 92vw;
-    margin-left: 4vw;
-    margin-right: 4vw;
-    box-sizing: border-box;
-    padding-left: 0;
-    padding-right: 0;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  
-}
-
-/* Zusätzliche mobile Optimierung */
-@media (max-width: 600px) {
-  #app {
-    max-width: 100vw;
-    padding: 8px 0.5vw;
-    box-sizing: border-box;
-  }
-
-  .start-content {
-    padding: 0 2vw 20px 2vw;
-    max-width: 100vw;
-  }
-
-  #video-player {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin: 0;
-    left: 0 !important;
-    position: static !important;
-  }
-
-  #valenceArousalCanvas {
-    width: 90vw !important;
-    height: 90vw !important;
-    min-width: 180px !important;
-    min-height: 180px !important;
-    max-width: 98vw !important;
-    max-height: 98vw !important;
-    margin-top: 3.5rem !important;
-    left: 50%;
-    transform: translateX(-50%);
-    position: relative !important;
-    display: block;
-  }
-
-  #vaCoordinates {
-    font-size: 1.1rem !important;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0 2vw;
-    max-width: 98vw;
-  }
-
-  .instrument-img,
-  .instrument-img-wrapper {
-    width: 48vw !important;
-    height: 48vw !important;
-    min-width: 120px !important;
-    min-height: 120px !important;
-    max-width: 98vw !important;
-    max-height: 98vw !important;
-  }
-}
+  <audio id="background-audio"></audio>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
