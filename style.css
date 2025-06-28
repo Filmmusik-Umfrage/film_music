@@ -429,16 +429,17 @@ select {
   }
 
   #valenceArousalCanvas {
-    width: 98vw !important;
-    height: 98vw !important;
-    min-width: 220px !important;
-    min-height: 220px !important;
-    max-width: 99vw !important;
-    max-height: 99vw !important;
-    margin-top: 2rem !important;
+    width: 90vw !important;
+    height: 90vw !important;
+    min-width: 180px !important;
+    min-height: 180px !important;
+    max-width: 98vw !important;
+    max-height: 98vw !important;
+    margin-top: 1.5rem !important;
     left: 50%;
     transform: translateX(-50%);
     position: relative !important;
+    display: block;
   }
 
   #vaCoordinates {
