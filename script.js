@@ -593,6 +593,11 @@ videoPlayer.addEventListener("ended", () => {
 
   backgroundAudio.pause();
   backgroundAudio.currentTime = 0;
+
+  // --- NEU: Auf Mobilgeräten Video-Fenster automatisch schließen ---
+  if (window.innerWidth <= 600) {
+    videoPlayer.style.display = "none";
+  }
 });
 
 nextButton.addEventListener("click", () => {
