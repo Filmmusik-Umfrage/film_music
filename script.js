@@ -574,47 +574,27 @@ document.getElementById("start-button").addEventListener("click", () => {
 });
 
 videoPlayer.addEventListener("ended", () => {
-  // Prüfe, ob Mobilgerät (Viewport ≤ 600px)
-  const isMobileView = window.innerWidth <= 600;
+  // Video immer ausblenden
+  videoPlayer.style.display = "none";
+  // Canvas immer einblenden
+  valenceArousalCanvas.style.display = "block";
+  drawValenceArousalModel();
 
-  // Prüfe, ob das Video im Fullscreen ist (Safari/iOS)
-  const isFullscreen = document.fullscreenElement === videoPlayer ||
-                       document.webkitFullscreenElement === videoPlayer;
-
-  function hideVideoAndShowCanvas() {
-    videoPlayer.style.display = "none";
-    valenceArousalCanvas.style.display = "block";
-    drawValenceArousalModel();
-
-    // Text anzeigen, wenn KEIN Song vorhanden ist
-    const videoQuestion = document.getElementById("video-question");
-    if (!songs[currentStep] && videos[currentStep] !== "keinVideo.mp4") {
-      videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
-    } else if (videos[currentStep] === "keinVideo.mp4") {
-      videoQuestion.textContent = "Wie wirkt die Musik ohne Bild?";
-    } else {
-      videoQuestion.textContent = "Wie wirkt die Szene?";
-    }
-
-    nextButton.style.display = "none"; // Button ausblenden, bis geklickt wird
-    nextButton.disabled = true;
-
-    backgroundAudio.pause();
-    backgroundAudio.currentTime = 0;
-  }
-
-  if (isMobileView && isFullscreen) {
-    // Versuche, den Fullscreen zu verlassen (Safari/iOS)
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-    // Warte kurz, bis Fullscreen verlassen wurde, dann ausblenden
-    setTimeout(hideVideoAndShowCanvas, 400);
+  // Text anzeigen, wenn KEIN Song vorhanden ist
+  const videoQuestion = document.getElementById("video-question");
+  if (!songs[currentStep] && videos[currentStep] !== "keinVideo.mp4") {
+    videoQuestion.textContent = "Wie wirkt die Szene ohne Musik?";
+  } else if (videos[currentStep] === "keinVideo.mp4") {
+    videoQuestion.textContent = "Wie wirkt die Musik ohne Bild?";
   } else {
-    hideVideoAndShowCanvas();
+    videoQuestion.textContent = "Wie wirkt die Szene?";
   }
+
+  nextButton.style.display = "none"; // Button ausblenden, bis geklickt wird
+  nextButton.disabled = true;
+
+  backgroundAudio.pause();
+  backgroundAudio.currentTime = 0;
 });
 
 nextButton.addEventListener("click", () => {
