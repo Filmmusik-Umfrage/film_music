@@ -574,14 +574,9 @@ document.getElementById("start-button").addEventListener("click", () => {
 });
 
 videoPlayer.addEventListener("ended", () => {
-  // Video immer ausblenden
   videoPlayer.style.display = "none";
-  // Canvas immer einblenden
   valenceArousalCanvas.style.display = "block";
   drawValenceArousalModel();
-
-  // Deutlicher Hinweistext für die Nutzer
-  vaCoordinates.textContent = "Bitte wählen Sie jetzt einen Punkt im Kreis, um Ihre Emotionen anzugeben.";
 
   // Text anzeigen, wenn KEIN Song vorhanden ist
   const videoQuestion = document.getElementById("video-question");
@@ -925,13 +920,13 @@ videoPlayer.src = videos[currentStep];
 
 // Mobil-Check
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-if (videos[currentStep] === "Umfrage_Video_1_neu.mp4" && isMobile) {
-  videoPlayer.muted = true;
+// Nur auf Desktop anzeigen
+if (!isMobile) {
+  videoPlayer.style.display = "block";
+  videoPlayer.play();
 } else {
-  videoPlayer.muted = false;
+  videoPlayer.style.display = "none";
 }
-
-videoPlayer.play();
 
 // --- Datenschutz-Modal ---
 document.getElementById("privacy-link")?.addEventListener("click", function(e) {
